@@ -5,7 +5,9 @@ import com.hashini.medicare.service.PatientService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class PatientController {
 
@@ -16,8 +18,8 @@ public class PatientController {
     }
 
     @GetMapping("/patients")
-    public List<Patient> getAllPatients() {
-        return patientService.getAllPatients();
+    public List<Patient> getAllPatients(@RequestParam Optional<String> patientName) {
+        return patientService.getAllPatients(patientName);
     }
 
     @GetMapping("/patients/{id}")

@@ -5,6 +5,7 @@ import com.hashini.medicare.repository.PatientRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -15,10 +16,9 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
 
-    public List<Patient> getAllPatients() {
-        return patientRepository.findAll();
+    public List<Patient> getAllPatients(Optional<String> patientName) {
+        return patientName.map(patientRepository::findByNameIgnoreCaseStartsWith).orElseGet(patientRepository::findAll);
     }
-
 
     public Patient getPatient(long id) {
         return patientRepository.findById(id).get();

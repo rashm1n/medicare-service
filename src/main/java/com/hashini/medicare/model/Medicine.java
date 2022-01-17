@@ -15,6 +15,14 @@ public class Medicine {
     @Column(name = "unit_price")
     private float unitPrice;
 
+    public Medicine(String name, float unitPrice) {
+        this.name = name;
+        this.unitPrice = unitPrice;
+    }
+
+    public Medicine() {
+    }
+
     @OneToMany(mappedBy = "medicine")
     private Set<PrescriptionMedicine> prescriptions;
 
