@@ -1,7 +1,8 @@
+/*
 package com.hashini.medicare.service;
 
 import com.hashini.medicare.model.Inventory;
-import com.hashini.medicare.dto.InventoryDTO;
+import com.hashini.medicare.dto.MedicineDTO;
 import com.hashini.medicare.model.Medicine;
 import com.hashini.medicare.repository.InventoryRepository;
 import com.hashini.medicare.repository.MedicineRepository;
@@ -22,18 +23,18 @@ public class InventoryService {
         this.medicineRepository = medicineRepository;
     }
 
-    public List<InventoryDTO> getAllInventories(Optional<String> medicineName) {
+    public List<MedicineDTO> getAllInventories(Optional<String> medicineName) {
         return medicineName.map(s -> medicineRepository.findByNameIgnoreCaseStartsWith(s)
-                .stream().map(medicine -> new InventoryDTO(inventoryRepository.findByMedicine(medicine)))
+                .stream().map(medicine -> new MedicineDTO(inventoryRepository.findByMedicine(medicine)))
                 .collect(Collectors.toList())
-        ).orElseGet(() -> inventoryRepository.findAll().stream().map(InventoryDTO::new).collect(Collectors.toList()));
+        ).orElseGet(() -> inventoryRepository.findAll().stream().map(MedicineDTO::new).collect(Collectors.toList()));
     }
 
     public Inventory getInventory(long id) {
         return inventoryRepository.findById(id).get();
     }
 
-    public Inventory addInventory(InventoryDTO newInventory) {
+    public Inventory addInventory(MedicineDTO newInventory) {
         Inventory inventory = new Inventory();
         return medicineRepository.findByName(newInventory.getName())
                 .map(medicine -> {
@@ -63,4 +64,4 @@ public class InventoryService {
                 });
     }
 
-}
+}*/

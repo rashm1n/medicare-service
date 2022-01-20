@@ -1,11 +1,14 @@
 package com.hashini.medicare.controller;
 
+import com.hashini.medicare.dto.MedicineDTO;
 import com.hashini.medicare.model.Medicine;
 import com.hashini.medicare.service.MedicineService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class MedicineController {
 
@@ -16,12 +19,12 @@ public class MedicineController {
     }
 
     @GetMapping("/medicines")
-    public List<Medicine> getAllMedicines() {
-        return medicineService.getAllMedicines();
+    public List<MedicineDTO> getAllMedicines(@RequestParam Optional<String> medicineName) {
+        return medicineService.getAllMedicines(medicineName);
     }
 
     @PostMapping("/medicines")
-    public Medicine addMedicine(@RequestBody Medicine newMedicine) {
+    public Medicine addMedicine(@RequestBody MedicineDTO newMedicine) {
         return medicineService.addMedicine(newMedicine);
     }
 

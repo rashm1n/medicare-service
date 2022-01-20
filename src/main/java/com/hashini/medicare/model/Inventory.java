@@ -1,3 +1,4 @@
+/*
 package com.hashini.medicare.model;
 
 import javax.persistence.*;
@@ -40,3 +41,4 @@ public class Inventory {
         this.units = units;
     }
 }
+*/

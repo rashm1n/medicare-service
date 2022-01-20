@@ -1,23 +1,15 @@
 package com.hashini.medicare.dto;
 
-import com.hashini.medicare.model.Inventory;
-
-public class InventoryDTO {
+public class MedicineDTO {
 
     private String name;
     private float unitPrice;
     private int units;
 
-    public InventoryDTO(String name, float unitPrice, int units) {
+    public MedicineDTO(String name, float unitPrice, int units) {
         this.name = name;
         this.unitPrice = unitPrice;
         this.units = units;
-    }
-
-    public InventoryDTO(Inventory inventory){
-        this.name = inventory.getMedicine().getName();
-        this.unitPrice = inventory.getMedicine().getUnitPrice();
-        this.units = inventory.getUnits();
     }
 
     public String getName() {

@@ -14,10 +14,13 @@ public class Medicine {
     private String name;
     @Column(name = "unit_price")
     private float unitPrice;
+    @Column(name = "units")
+    private int units;
 
-    public Medicine(String name, float unitPrice) {
+    public Medicine(String name, float unitPrice, int units) {
         this.name = name;
         this.unitPrice = unitPrice;
+        this.units = units;
     }
 
     public Medicine() {
@@ -48,6 +51,14 @@ public class Medicine {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getUnits() {
+        return units;
+    }
+
+    public void setUnits(int units) {
+        this.units = units;
     }
 
     public Set<PrescriptionMedicine> getPrescriptions() {

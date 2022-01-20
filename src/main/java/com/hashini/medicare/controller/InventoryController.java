@@ -1,7 +1,8 @@
+/*
 package com.hashini.medicare.controller;
 
 import com.hashini.medicare.model.Inventory;
-import com.hashini.medicare.dto.InventoryDTO;
+import com.hashini.medicare.dto.MedicineDTO;
 import com.hashini.medicare.service.InventoryService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class InventoryController {
     }
 
     @GetMapping("/inventories")
-    public List<InventoryDTO> getAllInventories(@RequestParam Optional<String> medicineName) {
+    public List<MedicineDTO> getAllInventories(@RequestParam Optional<String> medicineName) {
         return inventoryService.getAllInventories(medicineName);
     }
 
@@ -29,7 +30,7 @@ public class InventoryController {
     }
 
     @PostMapping("/inventories")
-    public Inventory addInventory(@RequestBody InventoryDTO newInventory) {
+    public Inventory addInventory(@RequestBody MedicineDTO newInventory) {
         return inventoryService.addInventory(newInventory);
     }
 
@@ -38,3 +39,4 @@ public class InventoryController {
         return inventoryService.updateInventory(newInventory, id);
     }
 }
+*/
