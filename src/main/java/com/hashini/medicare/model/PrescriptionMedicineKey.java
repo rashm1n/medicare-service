@@ -13,6 +13,15 @@ public class PrescriptionMedicineKey implements Serializable {
     @Column(name = "medicine_id")
     long medicineId;
 
+    public PrescriptionMedicineKey(long prescriptionId, long medicineId) {
+        this.prescriptionId = prescriptionId;
+        this.medicineId = medicineId;
+    }
+
+    public PrescriptionMedicineKey() {
+
+    }
+
     public long getPrescriptionId() {
         return prescriptionId;
     }

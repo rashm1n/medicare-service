@@ -17,6 +17,9 @@ public class Medicine {
     @Column(name = "units")
     private int units;
 
+    @OneToMany(mappedBy = "medicine")
+    private Set<PrescriptionMedicine> prescriptions;
+
     public Medicine(String name, float unitPrice, int units) {
         this.name = name;
         this.unitPrice = unitPrice;
@@ -25,9 +28,6 @@ public class Medicine {
 
     public Medicine() {
     }
-
-    @OneToMany(mappedBy = "medicine")
-    private Set<PrescriptionMedicine> prescriptions;
 
     public long getId() {
         return id;

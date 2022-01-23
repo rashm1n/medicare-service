@@ -22,6 +22,14 @@ public class Prescription {
     @Column(name = "date")
     private Date date;
 
+    public Prescription( Patient patient, Date date) {
+        this.patient = patient;
+        this.date = date;
+    }
+
+    public Prescription() {
+    }
+
     public long getId() {
         return id;
     }

@@ -7,9 +7,9 @@ public class PrescriptionDTO {
 
     private long patientId;
     private Date date;
-    private List<String> medicines;
+    private List<PrescriptionMedicineDTO> medicines;
 
-    public PrescriptionDTO(long patientId, Date date, List<String> medicines) {
+    public PrescriptionDTO(long patientId, Date date, List<PrescriptionMedicineDTO> medicines) {
         this.patientId = patientId;
         this.date = date;
         this.medicines = medicines;
@@ -31,11 +31,11 @@ public class PrescriptionDTO {
         this.date = date;
     }
 
-    public List<String> getMedicines() {
+    public List<PrescriptionMedicineDTO> getMedicines() {
         return medicines;
     }
 
-    public void setMedicines(List<String> medicines) {
+    public void setMedicines(List<PrescriptionMedicineDTO> medicines) {
         this.medicines = medicines;
     }
 }

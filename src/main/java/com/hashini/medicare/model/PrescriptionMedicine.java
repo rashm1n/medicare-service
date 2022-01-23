@@ -18,8 +18,33 @@ public class PrescriptionMedicine {
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
-    private int dose;
-    private int units;
+    @Column(name = "dose")
+    private String dose;
+    @Column(name = "frequency")
+    private String frequency;
+    @Column(name = "duration")
+    private String duration;
+    @Column(name = "additional_info")
+    private String additionalInfo;
+
+    public PrescriptionMedicine(Prescription prescription,
+                                Medicine medicine,
+                                String dose,
+                                String frequency,
+                                String duration,
+                                String additionalInfo) {
+        this.id = new PrescriptionMedicineKey(prescription.getId(), medicine.getId());
+        this.prescription = prescription;
+        this.medicine = medicine;
+        this.dose = dose;
+        this.frequency = frequency;
+        this.duration = duration;
+        this.additionalInfo = additionalInfo;
+    }
+
+    public PrescriptionMedicine() {
+
+    }
 
     public PrescriptionMedicineKey getId() {
         return id;
@@ -45,19 +70,35 @@ public class PrescriptionMedicine {
         this.medicine = medicine;
     }
 
-    public int getDose() {
+    public String getDose() {
         return dose;
     }
 
-    public void setDose(int dose) {
+    public void setDose(String dose) {
         this.dose = dose;
     }
 
-    public int getUnits() {
-        return units;
+    public String getFrequency() {
+        return frequency;
     }
 
-    public void setUnits(int units) {
-        this.units = units;
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 }
