@@ -12,6 +12,6 @@ public class MedicineMapper {
     }
 
     public MedicineDTO toMedicineDTO(Medicine medicine) {
-        return new MedicineDTO(medicine.getName(), medicine.getUnitPrice(), medicine.getUnits());
+        return new MedicineDTO(medicine.getId(), medicine.getName(), medicine.getUnitPrice(), medicine.getUnits());
     }
 }

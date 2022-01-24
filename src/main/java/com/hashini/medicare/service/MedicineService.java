@@ -29,6 +29,10 @@ public class MedicineService {
                 .collect(Collectors.toList()));
     }
 
+    public MedicineDTO getMedicine(long id) {
+        return medicineMapper.toMedicineDTO(medicineRepository.findById(id).get());
+    }
+
     public Medicine addMedicine(MedicineDTO newMedicine) {
         return medicineRepository.save(medicineMapper.toMedicine(newMedicine));
     }

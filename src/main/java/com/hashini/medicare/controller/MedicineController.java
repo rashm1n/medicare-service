@@ -23,6 +23,11 @@ public class MedicineController {
         return medicineService.getAllMedicines(medicineName);
     }
 
+    @GetMapping("/medicines/{id}")
+    public MedicineDTO getMedicine(@PathVariable long id) {
+        return medicineService.getMedicine(id);
+    }
+
     @PostMapping("/medicines")
     public Medicine addMedicine(@RequestBody MedicineDTO newMedicine) {
         return medicineService.addMedicine(newMedicine);
