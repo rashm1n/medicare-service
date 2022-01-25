@@ -27,4 +27,17 @@ public class PatientService {
     public Patient addPatient(Patient patient) {
         return patientRepository.save(patient);
     }
+
+    public Patient editPatient(Patient newPatient, long patientId) {
+        return patientRepository.findById(patientId)
+                .map(patient -> {
+                    patient.setName(newPatient.getName());
+                    patient.setAge(newPatient.getAge());
+                    patient.setGender(newPatient.getGender());
+                    return patientRepository.save(patient);
+                }).orElseGet(() -> {
+                    newPatient.setId(patientId);
+                    return patientRepository.save(newPatient);
+                });
+    }
 }

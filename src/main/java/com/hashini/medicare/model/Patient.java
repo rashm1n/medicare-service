@@ -13,9 +13,21 @@ public class Patient {
     private String name;
     @Column(name = "age")
     private int age;
+    @Column(name = "gender")
+    private String gender;
 
     @OneToOne(mappedBy = "patient")
     private Prescription prescription;
+
+    public Patient(long id, String name, int age, String gender) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+    }
+
+    public Patient() {
+    }
 
     public long getId() {
         return id;
@@ -39,6 +51,14 @@ public class Patient {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
 }

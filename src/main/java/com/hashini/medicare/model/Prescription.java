@@ -22,7 +22,7 @@ public class Prescription {
     @Column(name = "date")
     private Date date;
 
-    public Prescription( Patient patient, Date date) {
+    public Prescription(Patient patient, Date date) {
         this.patient = patient;
         this.date = date;
     }
@@ -54,11 +54,4 @@ public class Prescription {
         this.date = date;
     }
 
-    public Set<PrescriptionMedicine> getMedicines() {
-        return medicines;
-    }
-
-    public void setMedicines(Set<PrescriptionMedicine> medicines) {
-        this.medicines = medicines;
-    }
 }
