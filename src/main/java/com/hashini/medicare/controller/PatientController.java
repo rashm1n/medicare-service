@@ -1,5 +1,6 @@
 package com.hashini.medicare.controller;
 
+import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.model.Patient;
 import com.hashini.medicare.service.PatientService;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class PatientController {
     }
 
     @GetMapping("/patients/{id}")
-    public Patient getPatient(@PathVariable long id) {
+    public Patient getPatient(@PathVariable long id) throws NotFoundException {
         return patientService.getPatient(id);
     }
 

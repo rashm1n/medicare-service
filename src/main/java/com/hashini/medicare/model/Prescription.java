@@ -1,5 +1,7 @@
 package com.hashini.medicare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -12,10 +14,11 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "prescription")
     private Set<PrescriptionMedicine> medicines;
 

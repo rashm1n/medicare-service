@@ -1,9 +1,12 @@
 package com.hashini.medicare.service;
 
 import com.hashini.medicare.dto.MedicineDTO;
+import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.mapper.MedicineMapper;
 import com.hashini.medicare.model.Medicine;
+import com.hashini.medicare.model.MedicineType;
 import com.hashini.medicare.repository.MedicineRepository;
+import com.hashini.medicare.repository.MedicineTypeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +18,13 @@ public class MedicineService {
 
     private final MedicineRepository medicineRepository;
     private final MedicineMapper medicineMapper;
+    private final MedicineTypeRepository medicineTypeRepository;
 
     public MedicineService(MedicineRepository medicineRepository,
+                           MedicineTypeRepository medicineTypeRepository,
                            MedicineMapper medicineMapper) {
         this.medicineRepository = medicineRepository;
+        this.medicineTypeRepository = medicineTypeRepository;
         this.medicineMapper = medicineMapper;
     }
 
@@ -29,25 +35,32 @@ public class MedicineService {
                 .collect(Collectors.toList()));
     }
 
-    public MedicineDTO getMedicine(long id) {
-        return medicineMapper.toMedicineDTO(medicineRepository.findById(id).get());
+    public MedicineDTO getMedicine(long id) throws NotFoundException {
+        return medicineMapper.toMedicineDTO(medicineRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Medicine id = " + id + " not found")));
     }
 
-    public Medicine addMedicine(MedicineDTO newMedicine) {
-        return medicineRepository.save(medicineMapper.toMedicine(newMedicine));
+    public Medicine addMedicine(MedicineDTO newMedicine) throws NotFoundException {
+        MedicineType type = medicineTypeRepository.findByName(newMedicine.getType()).orElseThrow(() ->
+                new NotFoundException("Medicine Type =" + newMedicine.getType() + " is not found"));
+        return medicineRepository.save(medicineMapper.toMedicine(newMedicine, type));
     }
 
-    public Medicine updateMedicine(Medicine newMedicine,
-                                   long id) {
+    public Medicine updateMedicine(MedicineDTO newMedicine,
+                                   long id) throws NotFoundException {
+        MedicineType type = medicineTypeRepository.findByName(newMedicine.getType()).orElseThrow(() ->
+                new NotFoundException("Medicine Type =" + newMedicine.getType() + " is not found"));
         return medicineRepository.findById(id)
                 .map(medicine -> {
                     medicine.setName(newMedicine.getName());
+                    medicine.setUnits(newMedicine.getUnits());
                     medicine.setUnitPrice(newMedicine.getUnitPrice());
+                    medicine.setMedicineType(type);
                     return medicineRepository.save(medicine);
                 })
                 .orElseGet(() -> {
                     newMedicine.setId(id);
-                    return medicineRepository.save(newMedicine);
+                    return medicineRepository.save(medicineMapper.toMedicine(newMedicine, type));
                 });
     }
 }

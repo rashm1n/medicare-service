@@ -1,5 +1,6 @@
 package com.hashini.medicare.service;
 
+import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.model.Patient;
 import com.hashini.medicare.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,9 @@ public class PatientService {
         return patientName.map(patientRepository::findByNameIgnoreCaseStartsWith).orElseGet(patientRepository::findAll);
     }
 
-    public Patient getPatient(long id) {
-        return patientRepository.findById(id).get();
+    public Patient getPatient(long id) throws NotFoundException {
+        return patientRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Patient id = " + id + " not found"));
     }
 
     public Patient addPatient(Patient patient) {

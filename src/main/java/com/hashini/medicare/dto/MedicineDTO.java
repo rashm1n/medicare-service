@@ -6,12 +6,14 @@ public class MedicineDTO {
     private String name;
     private float unitPrice;
     private int units;
+    private String type;
 
-    public MedicineDTO(long id, String name, float unitPrice, int units) {
+    public MedicineDTO(long id, String name, float unitPrice, int units, String type) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
         this.units = units;
+        this.type = type;
     }
 
     public long getId() {
@@ -44,5 +46,13 @@ public class MedicineDTO {
 
     public void setUnits(int units) {
         this.units = units;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

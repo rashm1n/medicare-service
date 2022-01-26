@@ -1,6 +1,7 @@
 package com.hashini.medicare.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "patient")
@@ -16,18 +17,8 @@ public class Patient {
     @Column(name = "gender")
     private String gender;
 
-    @OneToOne(mappedBy = "patient")
-    private Prescription prescription;
-
-    public Patient(long id, String name, int age, String gender) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-    }
-
-    public Patient() {
-    }
+    @OneToMany(mappedBy = "patient")
+    private Set<Prescription> prescriptions;
 
     public long getId() {
         return id;
