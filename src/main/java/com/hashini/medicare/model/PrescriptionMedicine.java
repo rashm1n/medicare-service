@@ -26,13 +26,16 @@ public class PrescriptionMedicine {
     private String duration;
     @Column(name = "additional_info")
     private String additionalInfo;
+    @Column(name = "quantity")
+    private int quantity;
 
     public PrescriptionMedicine(Prescription prescription,
                                 Medicine medicine,
                                 String dose,
                                 String frequency,
                                 String duration,
-                                String additionalInfo) {
+                                String additionalInfo,
+                                int quantity) {
         this.id = new PrescriptionMedicineKey(prescription.getId(), medicine.getId());
         this.prescription = prescription;
         this.medicine = medicine;
@@ -40,6 +43,7 @@ public class PrescriptionMedicine {
         this.frequency = frequency;
         this.duration = duration;
         this.additionalInfo = additionalInfo;
+        this.quantity = quantity;
     }
 
     public PrescriptionMedicine() {
@@ -100,5 +104,13 @@ public class PrescriptionMedicine {
 
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

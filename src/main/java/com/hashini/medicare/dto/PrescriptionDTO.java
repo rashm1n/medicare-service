@@ -1,26 +1,28 @@
 package com.hashini.medicare.dto;
 
+import com.hashini.medicare.model.Patient;
+
 import java.util.Date;
 import java.util.List;
 
 public class PrescriptionDTO {
 
-    private long patientId;
+    private Patient patient;
     private Date date;
     private List<PrescriptionMedicineDTO> medicines;
 
-    public PrescriptionDTO(long patientId, Date date, List<PrescriptionMedicineDTO> medicines) {
-        this.patientId = patientId;
+    public PrescriptionDTO(Patient patient, Date date, List<PrescriptionMedicineDTO> medicines) {
+        this.patient = patient;
         this.date = date;
         this.medicines = medicines;
     }
 
-    public long getPatientId() {
-        return patientId;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setPatientId(long patientId) {
-        this.patientId = patientId;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public Date getDate() {

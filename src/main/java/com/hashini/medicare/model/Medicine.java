@@ -1,10 +1,12 @@
 package com.hashini.medicare.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Set;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "medicine")
 public class Medicine {
@@ -23,7 +25,6 @@ public class Medicine {
     @JoinColumn(name = "medicinetype_id", nullable = false)
     private MedicineType medicineType;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "medicine")
     private Set<PrescriptionMedicine> prescriptions;
 

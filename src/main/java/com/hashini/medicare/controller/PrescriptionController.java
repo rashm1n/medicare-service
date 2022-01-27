@@ -1,14 +1,16 @@
 package com.hashini.medicare.controller;
 
+import com.hashini.medicare.dto.PrescriptionDTO;
 import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.model.Prescription;
-import com.hashini.medicare.dto.PrescriptionDTO;
+import com.hashini.medicare.dto.PrescriptionCreationDTO;
 import com.hashini.medicare.service.PrescriptionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -22,7 +24,7 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public PrescriptionDTO addPrescription(@RequestBody PrescriptionDTO prescriptionInfo) throws Exception {
+    public PrescriptionCreationDTO addPrescription(@RequestBody PrescriptionCreationDTO prescriptionInfo) throws Exception {
         try {
             return prescriptionService.addPrescription(prescriptionInfo);
         } catch (NotFoundException ex) {
@@ -31,8 +33,8 @@ public class PrescriptionController {
     }
 
     @GetMapping
-    public List<Prescription> getAllPrescriptions() {
-        return prescriptionService.getAllPrescriptions();
+    public List<PrescriptionDTO> getAllPrescriptions(@RequestParam Optional<Boolean> processed) {
+        return prescriptionService.getAllPrescriptions(processed);
     }
 
     @GetMapping("/{id}")
