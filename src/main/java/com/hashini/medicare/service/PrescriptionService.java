@@ -40,7 +40,7 @@ public class PrescriptionService {
         this.prescriptionMapper = prescriptionMapper;
     }
 
-    public PrescriptionCreationDTO addPrescription(PrescriptionCreationDTO prescriptionInfo) throws Exception {
+    public PrescriptionDTO addPrescription(PrescriptionCreationDTO prescriptionInfo) throws Exception {
         Patient patient = patientRepository.findById(prescriptionInfo.getPatientId()).orElseThrow(() ->
                 new NotFoundException("Patient with id = " + prescriptionInfo.getPatientId() + " is not found"));
         Prescription prescription = prescriptionRepository.save(new Prescription(patient, prescriptionInfo.getDate()));
@@ -50,8 +50,8 @@ public class PrescriptionService {
                     return new PrescriptionMedicine(prescription, medicine, item.getDose(), item.getFrequency(),
                             item.getDuration(), item.getAdditionalInfo(), item.getQuantity());
                 }).collect(Collectors.toList());
-        prescriptionMedicineRepository.saveAll(prescriptionMedicines);
-        return prescriptionInfo;
+        List<PrescriptionMedicine> savedMedicines = prescriptionMedicineRepository.saveAll(prescriptionMedicines);
+        return prescriptionMapper.toPrescriptionDTO(prescription, savedMedicines);
     }
 
     public List<PrescriptionDTO> getAllPrescriptions(Optional<Boolean> processed) {
@@ -59,8 +59,9 @@ public class PrescriptionService {
                 .stream().map(prescriptionMapper::toPrescriptionDTO).collect(Collectors.toList());
     }
 
-    public Prescription getPrescription(long id) throws Exception {
-        return prescriptionRepository.findById(id).orElseThrow(() ->
+    public PrescriptionDTO getPrescription(long id) throws Exception {
+        Prescription prescription = prescriptionRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Prescription with id = " + id + "not found"));
+        return prescriptionMapper.toPrescriptionDTO(prescription);
     }
 }

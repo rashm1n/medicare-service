@@ -1,9 +1,8 @@
 package com.hashini.medicare.controller;
 
+import com.hashini.medicare.dto.PrescriptionCreationDTO;
 import com.hashini.medicare.dto.PrescriptionDTO;
 import com.hashini.medicare.exception.NotFoundException;
-import com.hashini.medicare.model.Prescription;
-import com.hashini.medicare.dto.PrescriptionCreationDTO;
 import com.hashini.medicare.service.PrescriptionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,7 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public PrescriptionCreationDTO addPrescription(@RequestBody PrescriptionCreationDTO prescriptionInfo) throws Exception {
+    public PrescriptionDTO addPrescription(@RequestBody PrescriptionCreationDTO prescriptionInfo) throws Exception {
         try {
             return prescriptionService.addPrescription(prescriptionInfo);
         } catch (NotFoundException ex) {
@@ -38,7 +37,7 @@ public class PrescriptionController {
     }
 
     @GetMapping("/{id}")
-    public Prescription getPrescription(@PathVariable long id) throws Exception {
+    public PrescriptionDTO getPrescription(@PathVariable long id) throws Exception {
         try {
             return prescriptionService.getPrescription(id);
         } catch (NotFoundException ex) {

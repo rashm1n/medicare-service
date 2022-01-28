@@ -9,11 +9,17 @@ import org.springframework.stereotype.Component;
 public class MedicineMapper {
 
     public Medicine toMedicine(MedicineDTO medicineDTO, MedicineType type) {
-        return new Medicine(medicineDTO.getName(), medicineDTO.getUnitPrice(), medicineDTO.getUnits(), type);
+        return new Medicine(medicineDTO.getName(),
+                medicineDTO.getUnitPrice(),
+                medicineDTO.getUnits(),
+                type);
     }
 
     public MedicineDTO toMedicineDTO(Medicine medicine) {
-        return new MedicineDTO(medicine.getId(), medicine.getName(), medicine.getUnitPrice(), medicine.getUnits(),
+        return new MedicineDTO(medicine.getId(),
+                medicine.getName(),
+                medicine.getUnitPrice(),
+                medicine.getUnits(),
                 medicine.getMedicineType().getName());
     }
 }

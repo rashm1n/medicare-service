@@ -7,14 +7,24 @@ import java.util.List;
 
 public class PrescriptionDTO {
 
+    private long id;
     private Patient patient;
     private Date date;
     private List<PrescriptionMedicineDTO> medicines;
 
-    public PrescriptionDTO(Patient patient, Date date, List<PrescriptionMedicineDTO> medicines) {
+    public PrescriptionDTO(long id, Patient patient, Date date, List<PrescriptionMedicineDTO> medicines) {
+        this.id = id;
         this.patient = patient;
         this.date = date;
         this.medicines = medicines;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Patient getPatient() {
