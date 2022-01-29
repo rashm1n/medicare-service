@@ -29,9 +29,13 @@ public class Prescription {
     @Column(name = "processed")
     private boolean processed;
 
-    public Prescription(Patient patient, Date date) {
+    @Column(name = "diagnosis")
+    private String diagnosis;
+
+    public Prescription(Patient patient, Date date, String diagnosis) {
         this.patient = patient;
         this.date = date;
+        this.diagnosis = diagnosis;
         this.processed = false;
     }
 
@@ -60,6 +64,14 @@ public class Prescription {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getDiagnosis() {
+        return diagnosis;
+    }
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
     }
 
     public Set<PrescriptionMedicine> getMedicines() {

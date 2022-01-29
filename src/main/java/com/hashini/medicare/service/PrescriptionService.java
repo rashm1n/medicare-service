@@ -43,7 +43,8 @@ public class PrescriptionService {
     public PrescriptionDTO addPrescription(PrescriptionCreationDTO prescriptionInfo) throws Exception {
         Patient patient = patientRepository.findById(prescriptionInfo.getPatientId()).orElseThrow(() ->
                 new NotFoundException("Patient with id = " + prescriptionInfo.getPatientId() + " is not found"));
-        Prescription prescription = prescriptionRepository.save(new Prescription(patient, prescriptionInfo.getDate()));
+        Prescription prescription = prescriptionRepository.save(new Prescription(patient, prescriptionInfo.getDate(),
+                prescriptionInfo.getDiagnosis()));
         List<PrescriptionMedicine> prescriptionMedicines = prescriptionInfo.getMedicines().stream()
                 .map(item -> {
                     Medicine medicine = medicineRepository.findByName(item.getMedicineName());

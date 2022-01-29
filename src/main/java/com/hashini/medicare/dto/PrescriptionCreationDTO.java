@@ -7,11 +7,16 @@ public class PrescriptionCreationDTO {
 
     private long patientId;
     private Date date;
+    private String diagnosis;
     private List<PrescriptionMedicineCreationDTO> medicines;
 
-    public PrescriptionCreationDTO(long patientId, Date date, List<PrescriptionMedicineCreationDTO> medicines) {
+    public PrescriptionCreationDTO(long patientId,
+                                   Date date,
+                                   String diagnosis,
+                                   List<PrescriptionMedicineCreationDTO> medicines) {
         this.patientId = patientId;
         this.date = date;
+        this.diagnosis = diagnosis;
         this.medicines = medicines;
     }
 
@@ -29,6 +34,14 @@ public class PrescriptionCreationDTO {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getDiagnosis() {
+        return diagnosis;
+    }
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
     }
 
     public List<PrescriptionMedicineCreationDTO> getMedicines() {

@@ -22,6 +22,7 @@ public class PrescriptionMapper {
         return new PrescriptionDTO(prescription.getId(),
                 prescription.getPatient(),
                 prescription.getDate(),
+                prescription.getDiagnosis(),
                 prescription.getMedicines().stream().map(this::toPrescriptionMedicineDTO).collect(Collectors.toList()));
     }
 
@@ -29,6 +30,7 @@ public class PrescriptionMapper {
         return new PrescriptionDTO(prescription.getId(),
                 prescription.getPatient(),
                 prescription.getDate(),
+                prescription.getDiagnosis(),
                 medicines.stream().map(this::toPrescriptionMedicineDTO).collect(Collectors.toList()));
     }
 
