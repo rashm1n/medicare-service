@@ -1,68 +1,47 @@
 package com.hashini.medicare.service;
 
-import com.hashini.medicare.dto.PrescriptionCreationDTO;
+import com.hashini.medicare.dao.PatientDAO;
+import com.hashini.medicare.dao.PrescriptionDAO;
 import com.hashini.medicare.dto.PrescriptionDTO;
 import com.hashini.medicare.exception.NotFoundException;
-import com.hashini.medicare.mapper.PrescriptionMapper;
-import com.hashini.medicare.model.Medicine;
 import com.hashini.medicare.model.Patient;
 import com.hashini.medicare.model.Prescription;
-import com.hashini.medicare.model.PrescriptionMedicine;
-import com.hashini.medicare.repository.MedicineRepository;
-import com.hashini.medicare.repository.PatientRepository;
-import com.hashini.medicare.repository.PrescriptionMedicineRepository;
-import com.hashini.medicare.repository.PrescriptionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PrescriptionService {
 
-    private final PrescriptionRepository prescriptionRepository;
-    private final PatientRepository patientRepository;
-    private final MedicineRepository medicineRepository;
-    private final PrescriptionMedicineRepository prescriptionMedicineRepository;
-    private final PrescriptionMapper prescriptionMapper;
+    private final PrescriptionDAO prescriptionDAO;
+    private final PatientDAO patientDAO;
 
-    public PrescriptionService(PrescriptionRepository prescriptionRepository,
-                               PatientRepository patientRepository,
-                               MedicineRepository medicineRepository,
-                               PrescriptionMedicineRepository prescriptionMedicineRepository,
-                               PrescriptionMapper prescriptionMapper) {
-
-        this.prescriptionRepository = prescriptionRepository;
-        this.patientRepository = patientRepository;
-        this.medicineRepository = medicineRepository;
-        this.prescriptionMedicineRepository = prescriptionMedicineRepository;
-        this.prescriptionMapper = prescriptionMapper;
+    public PrescriptionService(PrescriptionDAO prescriptionDAO,
+                               PatientDAO patientDAO) {
+        this.prescriptionDAO = prescriptionDAO;
+        this.patientDAO = patientDAO;
     }
 
-    public PrescriptionDTO addPrescription(PrescriptionCreationDTO prescriptionInfo) throws Exception {
-        Patient patient = patientRepository.findById(prescriptionInfo.getPatientId()).orElseThrow(() ->
-                new NotFoundException("Patient with id = " + prescriptionInfo.getPatientId() + " is not found"));
-        Prescription prescription = prescriptionRepository.save(new Prescription(patient, prescriptionInfo.getDate(),
-                prescriptionInfo.getDiagnosis()));
-        List<PrescriptionMedicine> prescriptionMedicines = prescriptionInfo.getMedicines().stream()
-                .map(item -> {
-                    Medicine medicine = medicineRepository.findByName(item.getMedicineName());
-                    return new PrescriptionMedicine(prescription, medicine, item.getDose(), item.getFrequency(),
-                            item.getDuration(), item.getAdditionalInfo(), item.getQuantity());
-                }).collect(Collectors.toList());
-        List<PrescriptionMedicine> savedMedicines = prescriptionMedicineRepository.saveAll(prescriptionMedicines);
-        return prescriptionMapper.toPrescriptionDTO(prescription, savedMedicines);
+    public int addPrescription(Prescription prescription) throws Exception {
+        Optional<Patient> patient = patientDAO.selectPatientById(prescription.getPatientId());
+        if (patient.isPresent()) {
+            return prescriptionDAO.addPrescription(prescription);
+        } else {
+            throw new NotFoundException("Patient with id = " + prescription.getPatientId() + " is not found");
+        }
     }
 
     public List<PrescriptionDTO> getAllPrescriptions(Optional<Boolean> processed) {
-        return processed.map(prescriptionRepository::findByProcessed).orElseGet(prescriptionRepository::findAll)
-                .stream().map(prescriptionMapper::toPrescriptionDTO).collect(Collectors.toList());
+        if (processed.isPresent()) {
+            return prescriptionDAO.selectPrescriptionsByProcessed(processed.get());
+        } else {
+            return prescriptionDAO.selectPrescriptions();
+        }
     }
 
     public PrescriptionDTO getPrescription(long id) throws Exception {
-        Prescription prescription = prescriptionRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Prescription with id = " + id + "not found"));
-        return prescriptionMapper.toPrescriptionDTO(prescription);
+        return prescriptionDAO.selectPrescriptionById(id)
+                .orElseThrow(() -> new NotFoundException("Prescription with id = " + id + "not found"));
     }
 }

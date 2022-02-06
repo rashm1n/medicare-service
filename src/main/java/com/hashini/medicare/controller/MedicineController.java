@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequestMapping("/medicare/v1/medicines")
 public class MedicineController {
 
     private final MedicineService medicineService;
@@ -19,22 +20,22 @@ public class MedicineController {
         this.medicineService = medicineService;
     }
 
-    @GetMapping("/medicines")
+    @GetMapping()
     public List<MedicineDTO> getAllMedicines(@RequestParam Optional<String> medicineName) {
         return medicineService.getAllMedicines(medicineName);
     }
 
-    @GetMapping("/medicines/{id}")
+    @GetMapping("/{id}")
     public MedicineDTO getMedicine(@PathVariable long id) throws NotFoundException {
         return medicineService.getMedicine(id);
     }
 
-    @PostMapping("/medicines")
+    @PostMapping()
     public Medicine addMedicine(@RequestBody MedicineDTO newMedicine) throws NotFoundException {
         return medicineService.addMedicine(newMedicine);
     }
 
-    @PutMapping("/medicines/{id}")
+    @PutMapping("/{id}")
     public Medicine updateMedicine(@RequestBody MedicineDTO newMedicine, @PathVariable long id) throws NotFoundException {
         return medicineService.updateMedicine(newMedicine, id);
     }

@@ -1,3 +1,4 @@
+/*
 package com.hashini.medicare.mapper;
 
 import com.hashini.medicare.dto.MedicineDTO;
@@ -22,4 +23,4 @@ public class MedicineMapper {
                 medicine.getUnits(),
                 medicine.getMedicineType().getName());
     }
-}
+}*/

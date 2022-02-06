@@ -1,39 +1,17 @@
 package com.hashini.medicare.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@Entity
-@Table(name = "prescription")
 public class Prescription {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)
-    private Patient patient;
-
-    @OneToMany(mappedBy = "prescription")
-    private Set<PrescriptionMedicine> medicines;
-
-    @Column(name = "date")
+    private long patientId;
     private Date date;
-
-    @Column(name = "processed")
+    private String diagnosis;
     private boolean processed;
 
-    @Column(name = "diagnosis")
-    private String diagnosis;
-
-    public Prescription(Patient patient, Date date, String diagnosis) {
-        this.patient = patient;
+    public Prescription(long patientId, Date date, String diagnosis) {
+        this.patientId = patientId;
         this.date = date;
         this.diagnosis = diagnosis;
         this.processed = false;
@@ -50,16 +28,16 @@ public class Prescription {
         this.id = id;
     }
 
+    public long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(long patientId) {
+        this.patientId = patientId;
+    }
+
     public Date getDate() {
         return date;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    public Patient getPatient() {
-        return patient;
     }
 
     public void setDate(Date date) {
@@ -72,14 +50,6 @@ public class Prescription {
 
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
-    }
-
-    public Set<PrescriptionMedicine> getMedicines() {
-        return medicines;
-    }
-
-    public void setMedicines(Set<PrescriptionMedicine> medicines) {
-        this.medicines = medicines;
     }
 
     public boolean isProcessed() {

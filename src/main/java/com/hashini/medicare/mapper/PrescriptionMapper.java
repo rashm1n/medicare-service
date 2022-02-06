@@ -1,3 +1,4 @@
+/*
 package com.hashini.medicare.mapper;
 
 import com.hashini.medicare.dto.PrescriptionDTO;
@@ -42,4 +43,4 @@ public class PrescriptionMapper {
                 prescriptionMedicine.getAdditionalInfo(),
                 prescriptionMedicine.getQuantity());
     }
-}
+}*/

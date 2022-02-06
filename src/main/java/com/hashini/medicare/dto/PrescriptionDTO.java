@@ -11,14 +11,13 @@ public class PrescriptionDTO {
     private Patient patient;
     private Date date;
     private String diagnosis;
-    private List<PrescriptionMedicineDTO> medicines;
+//    private List<PrescriptionMedicineDTO> medicines;
 
-    public PrescriptionDTO(long id, Patient patient, Date date, String diagnosis, List<PrescriptionMedicineDTO> medicines) {
+    public PrescriptionDTO(long id, Patient patient, Date date, String diagnosis) {
         this.id = id;
         this.patient = patient;
         this.date = date;
         this.diagnosis = diagnosis;
-        this.medicines = medicines;
     }
 
     public long getId() {
@@ -52,12 +51,12 @@ public class PrescriptionDTO {
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
     }
-
-    public List<PrescriptionMedicineDTO> getMedicines() {
-        return medicines;
-    }
-
-    public void setMedicines(List<PrescriptionMedicineDTO> medicines) {
-        this.medicines = medicines;
-    }
+//
+//    public List<PrescriptionMedicineDTO> getMedicines() {
+//        return medicines;
+//    }
+//
+//    public void setMedicines(List<PrescriptionMedicineDTO> medicines) {
+//        this.medicines = medicines;
+//    }
 }
