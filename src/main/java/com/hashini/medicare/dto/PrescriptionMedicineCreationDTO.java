@@ -4,15 +4,15 @@ public class PrescriptionMedicineCreationDTO {
 
     private String medicineName;
     private String dose;
-    private String frequency;
-    private String duration;
+    private int frequency;
+    private int duration;
     private String additionalInfo;
     private int quantity;
 
     public PrescriptionMedicineCreationDTO(String medicineName,
                                            String dose,
-                                           String frequency,
-                                           String duration,
+                                           int frequency,
+                                           int duration,
                                            String additionalInfo,
                                            int quantity) {
         this.medicineName = medicineName;
@@ -39,19 +39,19 @@ public class PrescriptionMedicineCreationDTO {
         this.dose = dose;
     }
 
-    public String getFrequency() {
+    public int getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(String frequency) {
+    public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
 
-    public String getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 

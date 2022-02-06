@@ -1,7 +1,7 @@
 package com.hashini.medicare.dao.implementation;
 
 import com.hashini.medicare.dao.PatientDAO;
-import com.hashini.medicare.mapper.PatientRowMapper;
+import com.hashini.medicare.mapper.PatientMapper;
 import com.hashini.medicare.model.Patient;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,13 +21,13 @@ public class PatientDAOImpl implements PatientDAO {
     @Override
     public List<Patient> selectPatients() {
         String sql = "SELECT * FROM patient";
-        return jdbcTemplate.query(sql, new PatientRowMapper());
+        return jdbcTemplate.query(sql, new PatientMapper());
     }
 
     @Override
     public Optional<Patient> selectPatientById(long id) {
         String sql = "SELECT * FROM patient WHERE id = ?";
-        return jdbcTemplate.query(sql, new PatientRowMapper(), id)
+        return jdbcTemplate.query(sql, new PatientMapper(), id)
                 .stream()
                 .findFirst();
     }
@@ -35,7 +35,7 @@ public class PatientDAOImpl implements PatientDAO {
     @Override
     public List<Patient> selectPatientsByName(String patientName) {
         String sql = "SELECT * FROM patient WHERE LOWER(name) LIKE '%" + patientName.toLowerCase() + "%'";
-        return jdbcTemplate.query(sql, new PatientRowMapper());
+        return jdbcTemplate.query(sql, new PatientMapper());
     }
 
     @Override

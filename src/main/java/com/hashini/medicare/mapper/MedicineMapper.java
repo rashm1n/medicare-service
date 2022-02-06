@@ -1,26 +1,32 @@
-/*
 package com.hashini.medicare.mapper;
 
 import com.hashini.medicare.dto.MedicineDTO;
 import com.hashini.medicare.model.Medicine;
 import com.hashini.medicare.model.MedicineType;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.RowMapper;
 
-@Component
-public class MedicineMapper {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class MedicineMapper implements RowMapper<MedicineDTO> {
+
+    @Override
+    public MedicineDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return new MedicineDTO(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getFloat("unit_price"),
+                rs.getInt("units"),
+                rs.getString("type")
+        );
+    }
 
     public Medicine toMedicine(MedicineDTO medicineDTO, MedicineType type) {
-        return new Medicine(medicineDTO.getName(),
+        return new Medicine(
+                medicineDTO.getId(),
+                medicineDTO.getName(),
                 medicineDTO.getUnitPrice(),
                 medicineDTO.getUnits(),
-                type);
+                type.getId());
     }
-
-    public MedicineDTO toMedicineDTO(Medicine medicine) {
-        return new MedicineDTO(medicine.getId(),
-                medicine.getName(),
-                medicine.getUnitPrice(),
-                medicine.getUnits(),
-                medicine.getMedicineType().getName());
-    }
-}*/
+}

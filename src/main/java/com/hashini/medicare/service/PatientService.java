@@ -18,11 +18,7 @@ public class PatientService {
     }
 
     public List<Patient> getAllPatients(Optional<String> patientName) {
-        if (patientName.isPresent()) {
-            return patientDAO.selectPatientsByName(patientName.get());
-        } else {
-            return patientDAO.selectPatients();
-        }
+        return patientName.map(patientDAO::selectPatientsByName).orElseGet(patientDAO::selectPatients);
     }
 
     public Patient getPatient(long id) throws NotFoundException {
@@ -35,21 +31,18 @@ public class PatientService {
     }
 
     public int updatePatient(Patient newPatient, long patientId) {
-        Optional<Patient> patient = patientDAO.selectPatientById(patientId);
-        if (patient.isPresent()) {
-            return patientDAO.updatePatient(newPatient, patientId);
-        } else {
-            newPatient.setId(patientId);
-            return patientDAO.addPatient(newPatient);
-        }
+        return patientDAO.selectPatientById(patientId)
+                .map(patient -> patientDAO.updatePatient(newPatient, patientId))
+                .orElseGet(() -> {
+                    newPatient.setId(patientId);
+                    return patientDAO.addPatient(newPatient);
+                });
     }
 
-    public int deleteMovie(long id) throws NotFoundException {
-        Optional<Patient> patient = patientDAO.selectPatientById(id);
-        if (patient.isPresent()) {
-            return patientDAO.deleteMovie(id);
-        } else {
-            throw new NotFoundException("Patient id = " + id + " not found");
-        }
+    public int deletePatient(long id) throws NotFoundException {
+        return patientDAO.selectPatientById(id)
+                .map(patient -> patientDAO.deleteMovie(id))
+                .orElseThrow(() -> new NotFoundException("Patient id = " + id + " not found"));
+
     }
 }

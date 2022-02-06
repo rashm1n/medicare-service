@@ -14,5 +14,5 @@ public interface PrescriptionDAO {
 
     Optional<PrescriptionDTO> selectPrescriptionById(long id);
 
-    int addPrescription(Prescription prescription);
+    long addPrescription(Prescription prescription);
 }

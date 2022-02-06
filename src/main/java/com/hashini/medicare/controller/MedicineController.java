@@ -2,7 +2,6 @@ package com.hashini.medicare.controller;
 
 import com.hashini.medicare.dto.MedicineDTO;
 import com.hashini.medicare.exception.NotFoundException;
-import com.hashini.medicare.model.Medicine;
 import com.hashini.medicare.service.MedicineService;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,13 +30,18 @@ public class MedicineController {
     }
 
     @PostMapping()
-    public Medicine addMedicine(@RequestBody MedicineDTO newMedicine) throws NotFoundException {
+    public int addMedicine(@RequestBody MedicineDTO newMedicine) throws NotFoundException {
         return medicineService.addMedicine(newMedicine);
     }
 
     @PutMapping("/{id}")
-    public Medicine updateMedicine(@RequestBody MedicineDTO newMedicine, @PathVariable long id) throws NotFoundException {
+    public int updateMedicine(@RequestBody MedicineDTO newMedicine, @PathVariable long id) throws NotFoundException {
         return medicineService.updateMedicine(newMedicine, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public long deleteMedicine(@PathVariable long id) throws NotFoundException {
+        return medicineService.deleteMedicine(id);
     }
 
 }

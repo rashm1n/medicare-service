@@ -5,6 +5,11 @@ public class MedicineType {
     private long id;
     private String name;
 
+    public MedicineType(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public long getId() {
         return id;
     }

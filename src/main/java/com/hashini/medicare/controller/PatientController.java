@@ -41,6 +41,6 @@ public class PatientController {
 
     @DeleteMapping("/{id}")
     public long deletePatient(@PathVariable long id) throws NotFoundException {
-        return patientService.deleteMovie(id);
+        return patientService.deletePatient(id);
     }
 }
