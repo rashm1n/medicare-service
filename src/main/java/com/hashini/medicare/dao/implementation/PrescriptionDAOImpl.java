@@ -34,7 +34,8 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
                 "patient.age," +
                 "patient.gender " +
                 "FROM prescription " +
-                "INNER JOIN patient ON prescription.patient_id = patient.id";
+                "INNER JOIN patient ON prescription.patient_id = patient.id " +
+                "LEFT JOIN prescription_medicine pm on prescription.id = pm.prescription_id";
         return jdbcTemplate.query(sql, new PrescriptionMapper());
     }
 
