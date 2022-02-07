@@ -23,7 +23,8 @@ public class MedicineDAOImpl implements MedicineDAO {
     public List<MedicineDTO> selectMedicines() {
         String sql = "SELECT *" +
                 "FROM medicine " +
-                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id";
+                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
+                "ORDER BY medicine_id DESC";
         return jdbcTemplate.query(sql, new MedicineMapper());
     }
 
@@ -32,7 +33,8 @@ public class MedicineDAOImpl implements MedicineDAO {
         String sql = "SELECT *" +
                 "FROM medicine " +
                 "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
-                "WHERE LOWER(medicine.medicine_name) LIKE '%" + medicineName.toLowerCase() + "%'";
+                "WHERE LOWER(medicine.medicine_name) LIKE '%" + medicineName.toLowerCase() + "%'" +
+                "ORDER BY medicine_id DESC";
         return jdbcTemplate.query(sql, new MedicineMapper());
     }
 

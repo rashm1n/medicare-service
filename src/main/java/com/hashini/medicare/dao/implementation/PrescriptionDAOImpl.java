@@ -32,7 +32,8 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
                 "INNER JOIN patient p ON prescription.patient_id = p.patient_id " +
                 "LEFT JOIN prescription_medicine pm on prescription.prescription_id = pm.prescription_id " +
                 "LEFT JOIN medicine m on pm.medicine_id = m.medicine_id " +
-                "LEFT JOIN medicinetype m2 on m2.medicinetype_id = m.medicinetype_id";
+                "LEFT JOIN medicinetype m2 on m2.medicinetype_id = m.medicinetype_id " +
+                "ORDER BY prescription.prescription_id DESC";
         return new ArrayList<>((Objects.requireNonNull(jdbcTemplate.query(sql, new PrescriptionMapper()))).values());
     }
 
@@ -44,7 +45,8 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
                 "LEFT JOIN prescription_medicine pm on prescription.prescription_id = pm.prescription_id " +
                 "LEFT JOIN medicine m on pm.medicine_id = m.medicine_id " +
                 "LEFT JOIN medicinetype m2 on m2.medicinetype_id = m.medicinetype_id " +
-                "WHERE prescription.processed = ?";
+                "WHERE prescription.processed = ?" +
+                "ORDER BY prescription.prescription_id DESC";
         return new ArrayList<>(Objects.requireNonNull(jdbcTemplate.query(sql, new PrescriptionMapper(), processed)).values());
     }
 

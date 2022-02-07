@@ -17,5 +17,5 @@ public interface PatientDAO {
 
     Optional<Patient> selectPatientById(long id);
 
-    int deleteMovie(long id);
+    int deletePatient(long id);
 }

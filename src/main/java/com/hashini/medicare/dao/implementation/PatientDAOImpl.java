@@ -24,7 +24,7 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public List<Patient> selectPatients() {
-        String sql = "SELECT * FROM patient";
+        String sql = "SELECT * FROM patient ORDER BY patient_id DESC";
         return jdbcTemplate.query(sql, new PatientMapper());
     }
 
@@ -38,7 +38,7 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public List<Patient> selectPatientsByName(String patientName) {
-        String sql = "SELECT * FROM patient WHERE LOWER(patient_name) LIKE '%" + patientName.toLowerCase() + "%'";
+        String sql = "SELECT * FROM patient WHERE LOWER(patient_name) LIKE '%" + patientName.toLowerCase() + "%' ORDER BY patient_id DESC";
         return jdbcTemplate.query(sql, new PatientMapper());
     }
 
@@ -65,7 +65,7 @@ public class PatientDAOImpl implements PatientDAO {
     }
 
     @Override
-    public int deleteMovie(long id) {
+    public int deletePatient(long id) {
         String sql = "DELETE FROM patient WHERE patient_id = ?";
         return jdbcTemplate.update(sql, id);
     }

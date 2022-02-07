@@ -41,7 +41,7 @@ public class PatientService {
 
     public int deletePatient(long id) throws NotFoundException {
         return patientDAO.selectPatientById(id)
-                .map(patient -> patientDAO.deleteMovie(id))
+                .map(patient -> patientDAO.deletePatient(id))
                 .orElseThrow(() -> new NotFoundException("Patient id = " + id + " not found"));
 
     }
