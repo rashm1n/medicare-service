@@ -13,8 +13,8 @@ public class MedicineMapper implements RowMapper<MedicineDTO> {
     @Override
     public MedicineDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new MedicineDTO(
-                rs.getInt("id"),
-                rs.getString("name"),
+                rs.getInt("medicine_id"),
+                rs.getString("medicine_name"),
                 rs.getFloat("unit_price"),
                 rs.getInt("units"),
                 rs.getString("type")

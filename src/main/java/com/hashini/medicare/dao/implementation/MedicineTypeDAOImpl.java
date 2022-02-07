@@ -18,10 +18,10 @@ public class MedicineTypeDAOImpl implements MedicineTypeDAO {
 
     @Override
     public Optional<MedicineType> selectMedicineTypeByName(String name) {
-        String sql = "SELECT * FROM medicinetype WHERE name = ?";
+        String sql = "SELECT * FROM medicinetype WHERE type = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new MedicineType(
-                        rs.getInt("id"),
-                        rs.getString("name")), name)
+                        rs.getInt("medicinetype_id"),
+                        rs.getString("type")), name)
                 .stream()
                 .findFirst();
     }

@@ -21,32 +21,24 @@ public class MedicineDAOImpl implements MedicineDAO {
 
     @Override
     public List<MedicineDTO> selectMedicines() {
-        String sql = "SELECT medicine.id AS id, " +
-                "medicine.name," +
-                "medicine.unit_price," +
-                "medicine.units," +
-                "m.name AS type " +
+        String sql = "SELECT *" +
                 "FROM medicine " +
-                "INNER JOIN medicinetype m on m.id = medicine.medicinetype_id";
+                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id";
         return jdbcTemplate.query(sql, new MedicineMapper());
     }
 
     @Override
     public List<MedicineDTO> selectMedicinesByName(String medicineName) {
-        String sql = "SELECT medicine.id AS id, " +
-                "medicine.name," +
-                "medicine.unit_price," +
-                "medicine.units," +
-                "m.name AS type " +
+        String sql = "SELECT *" +
                 "FROM medicine " +
-                "INNER JOIN medicinetype m on m.id = medicine.medicinetype_id " +
-                "WHERE LOWER(medicine.name) LIKE '%" + medicineName.toLowerCase() + "%'";
+                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
+                "WHERE LOWER(medicine.medicine_name) LIKE '%" + medicineName.toLowerCase() + "%'";
         return jdbcTemplate.query(sql, new MedicineMapper());
     }
 
     @Override
     public int addMedicine(Medicine medicine) {
-        String sql = "INSERT INTO medicine(name,unit_price,units,medicinetype_id) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO medicine(medicine_name,unit_price,units,medicinetype_id) VALUES (?,?,?,?)";
         return jdbcTemplate.update(sql,
                 medicine.getName(),
                 medicine.getUnitPrice(),
@@ -56,7 +48,7 @@ public class MedicineDAOImpl implements MedicineDAO {
 
     @Override
     public int updateMedicine(Medicine medicine, long id) {
-        String sql = "UPDATE medicine SET name = ?, unit_price = ?, units = ?, medicinetype_id= ? WHERE id = ?";
+        String sql = "UPDATE medicine SET medicine_name = ?, unit_price = ?, units = ?, medicinetype_id= ? WHERE medicine_id = ?";
         return jdbcTemplate.update(sql,
                 medicine.getName(),
                 medicine.getUnitPrice(),
@@ -67,33 +59,25 @@ public class MedicineDAOImpl implements MedicineDAO {
 
     @Override
     public Optional<MedicineDTO> selectMedicineById(long id) {
-        String sql = "SELECT medicine.id AS id, " +
-                "medicine.name," +
-                "medicine.unit_price," +
-                "medicine.units," +
-                "m.name AS type " +
+        String sql = "SELECT *" +
                 "FROM medicine " +
-                "INNER JOIN medicinetype m on m.id = medicine.medicinetype_id " +
-                "WHERE medicine.id = ?";
+                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
+                "WHERE medicine.medicine_id = ?";
         return jdbcTemplate.query(sql, new MedicineMapper(), id).stream().findFirst();
     }
 
     @Override
     public Optional<MedicineDTO> selectMedicineByName(String name) {
-        String sql = "SELECT medicine.id AS id, " +
-                "medicine.name," +
-                "medicine.unit_price," +
-                "medicine.units," +
-                "m.name AS type " +
+        String sql = "SELECT *" +
                 "FROM medicine " +
-                "INNER JOIN medicinetype m on m.id = medicine.medicinetype_id " +
-                "WHERE medicine.name = ?";
+                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
+                "WHERE medicine.medicine_name = ?";
         return jdbcTemplate.query(sql, new MedicineMapper(), name).stream().findFirst();
     }
 
     @Override
     public int deleteMedicine(long id) {
-        String sql = "DELETE FROM medicine WHERE id = ?";
+        String sql = "DELETE FROM medicine WHERE medicine_id = ?";
         return jdbcTemplate.update(sql, id);
     }
 }
