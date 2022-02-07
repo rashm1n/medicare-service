@@ -25,7 +25,7 @@ public class PatientController {
     }
 
     @PostMapping()
-    public int addPatient(@RequestBody Patient patient) {
+    public long addPatient(@RequestBody Patient patient) {
         return patientService.addPatient(patient);
     }
 
@@ -35,7 +35,7 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public int updatePatient(@RequestBody Patient patient, @PathVariable long id) {
+    public long updatePatient(@RequestBody Patient patient, @PathVariable long id) {
         return patientService.updatePatient(patient, id);
     }
 

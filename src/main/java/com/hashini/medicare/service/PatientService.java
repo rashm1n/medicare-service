@@ -26,11 +26,11 @@ public class PatientService {
                 .orElseThrow(() -> new NotFoundException("Patient id = " + id + " not found"));
     }
 
-    public int addPatient(Patient patient) {
+    public long addPatient(Patient patient) {
         return patientDAO.addPatient(patient);
     }
 
-    public int updatePatient(Patient newPatient, long patientId) {
+    public long updatePatient(Patient newPatient, long patientId) {
         return patientDAO.selectPatientById(patientId)
                 .map(patient -> patientDAO.updatePatient(newPatient, patientId))
                 .orElseGet(() -> {

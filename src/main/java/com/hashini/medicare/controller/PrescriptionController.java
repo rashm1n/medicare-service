@@ -23,7 +23,7 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public long addPrescription(@RequestBody PrescriptionCreationDTO prescriptionInfo) throws Exception {
+    public long addPrescription(@RequestBody PrescriptionCreationDTO prescriptionInfo) {
         try {
             return prescriptionService.addPrescription(prescriptionInfo);
         } catch (NotFoundException ex) {

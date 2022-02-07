@@ -11,9 +11,9 @@ public interface PatientDAO {
 
     List<Patient> selectPatientsByName(String patientName);
 
-    int addPatient(Patient patient);
+    long addPatient(Patient patient);
 
-    int updatePatient(Patient patient,long id);
+    long updatePatient(Patient patient, long id);
 
     Optional<Patient> selectPatientById(long id);
 
