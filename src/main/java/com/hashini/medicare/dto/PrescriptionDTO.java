@@ -13,12 +13,11 @@ public class PrescriptionDTO {
     private String diagnosis;
     private List<PrescriptionMedicineDTO> medicines;
 
-    public PrescriptionDTO(long id, Patient patient, Date date, String diagnosis, List<PrescriptionMedicineDTO> medicines) {
+    public PrescriptionDTO(long id, Patient patient, Date date, String diagnosis) {
         this.id = id;
         this.patient = patient;
         this.date = date;
         this.diagnosis = diagnosis;
-        this.medicines = medicines;
     }
 
     public long getId() {

@@ -1,45 +1,59 @@
 package com.hashini.medicare.mapper;
 
+import com.hashini.medicare.dto.MedicineDTO;
 import com.hashini.medicare.dto.PrescriptionDTO;
 import com.hashini.medicare.dto.PrescriptionMedicineDTO;
-import com.hashini.medicare.model.Prescription;
-import com.hashini.medicare.model.PrescriptionMedicine;
-import org.springframework.stereotype.Component;
+import com.hashini.medicare.model.Patient;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-@Component
-public class PrescriptionMapper {
+public class PrescriptionMapper implements ResultSetExtractor<Map<Long, PrescriptionDTO>> {
 
-    private final MedicineMapper medicineMapper;
-
-    public PrescriptionMapper(MedicineMapper medicineMapper) {
-        this.medicineMapper = medicineMapper;
-    }
-
-    public PrescriptionDTO toPrescriptionDTO(Prescription prescription) {
-        return new PrescriptionDTO(prescription.getId(),
-                prescription.getPatient(),
-                prescription.getDate(),
-                prescription.getDiagnosis(),
-                prescription.getMedicines().stream().map(this::toPrescriptionMedicineDTO).collect(Collectors.toList()));
-    }
-
-    public PrescriptionDTO toPrescriptionDTO(Prescription prescription, List<PrescriptionMedicine> medicines) {
-        return new PrescriptionDTO(prescription.getId(),
-                prescription.getPatient(),
-                prescription.getDate(),
-                prescription.getDiagnosis(),
-                medicines.stream().map(this::toPrescriptionMedicineDTO).collect(Collectors.toList()));
-    }
-
-    private PrescriptionMedicineDTO toPrescriptionMedicineDTO(PrescriptionMedicine prescriptionMedicine) {
-        return new PrescriptionMedicineDTO(medicineMapper.toMedicineDTO(prescriptionMedicine.getMedicine()),
-                prescriptionMedicine.getDose(),
-                prescriptionMedicine.getFrequency(),
-                prescriptionMedicine.getDuration(),
-                prescriptionMedicine.getAdditionalInfo(),
-                prescriptionMedicine.getQuantity());
+    @Override
+    public Map<Long, PrescriptionDTO> extractData(ResultSet rs) throws SQLException, DataAccessException {
+        Map<Long, PrescriptionDTO> prescriptionsById = new HashMap<>();
+        while (rs.next()) {
+            long prescriptionId = rs.getLong("prescription_id");
+            PrescriptionDTO prescription = prescriptionsById.get(prescriptionId);
+            if (prescriptionsById.get(prescriptionId) == null) {
+                prescription = new PrescriptionDTO(
+                        rs.getLong("prescription_id"),
+                        new Patient(
+                                rs.getLong("patient_id"),
+                                rs.getString("patient_name"),
+                                rs.getInt("age"),
+                                rs.getString("gender")
+                        ),
+                        rs.getDate("date"),
+                        rs.getString("diagnosis"));
+                prescriptionsById.put(prescription.getId(), prescription);
+            }
+            List<PrescriptionMedicineDTO> prescriptionMedicineDTOList = prescription.getMedicines();
+            if (prescriptionMedicineDTOList == null) {
+                prescriptionMedicineDTOList = new ArrayList<>();
+                prescription.setMedicines(prescriptionMedicineDTOList);
+            }
+            PrescriptionMedicineDTO prescriptionMedicineDTO = new PrescriptionMedicineDTO(
+                    new MedicineDTO(rs.getLong("medicine_id"),
+                            rs.getString("medicine_name"),
+                            rs.getFloat("unit_price"),
+                            rs.getInt("units"),
+                            rs.getString("type")),
+                    rs.getString("dose"),
+                    rs.getInt("frequency"),
+                    rs.getInt("duration"),
+                    rs.getString("additional_info"),
+                    rs.getInt("quantity")
+            );
+            prescriptionMedicineDTOList.add(prescriptionMedicineDTO);
+        }
+        return prescriptionsById;
     }
 }

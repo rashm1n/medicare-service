@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/prescriptions")
+@RequestMapping("/medicare/v1/prescriptions")
 public class PrescriptionController {
 
     private final PrescriptionService prescriptionService;
@@ -23,11 +23,11 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public PrescriptionDTO addPrescription(@RequestBody PrescriptionCreationDTO prescriptionInfo) throws Exception {
+    public long addPrescription(@RequestBody PrescriptionCreationDTO prescriptionInfo) {
         try {
             return prescriptionService.addPrescription(prescriptionInfo);
         } catch (NotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found", ex);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
     }
 
@@ -37,11 +37,11 @@ public class PrescriptionController {
     }
 
     @GetMapping("/{id}")
-    public PrescriptionDTO getPrescription(@PathVariable long id) throws Exception {
+    public PrescriptionDTO getPrescription(@PathVariable long id) {
         try {
             return prescriptionService.getPrescription(id);
         } catch (NotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Prescription not found", ex);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
     }
 }

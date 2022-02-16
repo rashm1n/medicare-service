@@ -1,24 +1,18 @@
 package com.hashini.medicare.model;
 
-import javax.persistence.*;
-import java.util.Set;
-
-@Entity
-@Table(name = "patient")
 public class Patient {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "name")
     private String name;
-    @Column(name = "age")
     private int age;
-    @Column(name = "gender")
     private String gender;
 
-    @OneToMany(mappedBy = "patient")
-    private Set<Prescription> prescriptions;
+    public Patient(long id, String name, int age, String gender) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+    }
 
     public long getId() {
         return id;

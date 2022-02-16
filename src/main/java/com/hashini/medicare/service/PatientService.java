@@ -1,8 +1,8 @@
 package com.hashini.medicare.service;
 
+import com.hashini.medicare.dao.PatientDAO;
 import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.model.Patient;
-import com.hashini.medicare.repository.PatientRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,35 +11,38 @@ import java.util.Optional;
 @Service
 public class PatientService {
 
-    private final PatientRepository patientRepository;
+    private final PatientDAO patientDAO;
 
-    public PatientService(PatientRepository patientRepository) {
-        this.patientRepository = patientRepository;
+    public PatientService(PatientDAO patientDAO) {
+        this.patientDAO = patientDAO;
     }
 
     public List<Patient> getAllPatients(Optional<String> patientName) {
-        return patientName.map(patientRepository::findByNameIgnoreCaseStartsWith).orElseGet(patientRepository::findAll);
+        return patientName.map(patientDAO::selectPatientsByName).orElseGet(patientDAO::selectPatients);
     }
 
     public Patient getPatient(long id) throws NotFoundException {
-        return patientRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Patient id = " + id + " not found"));
+        return patientDAO.selectPatientById(id)
+                .orElseThrow(() -> new NotFoundException("Patient id = " + id + " not found"));
     }
 
-    public Patient addPatient(Patient patient) {
-        return patientRepository.save(patient);
+    public long addPatient(Patient patient) {
+        return patientDAO.addPatient(patient);
     }
 
-    public Patient editPatient(Patient newPatient, long patientId) {
-        return patientRepository.findById(patientId)
-                .map(patient -> {
-                    patient.setName(newPatient.getName());
-                    patient.setAge(newPatient.getAge());
-                    patient.setGender(newPatient.getGender());
-                    return patientRepository.save(patient);
-                }).orElseGet(() -> {
+    public long updatePatient(Patient newPatient, long patientId) {
+        return patientDAO.selectPatientById(patientId)
+                .map(patient -> patientDAO.updatePatient(newPatient, patientId))
+                .orElseGet(() -> {
                     newPatient.setId(patientId);
-                    return patientRepository.save(newPatient);
+                    return patientDAO.addPatient(newPatient);
                 });
+    }
+
+    public int deletePatient(long id) throws NotFoundException {
+        return patientDAO.selectPatientById(id)
+                .map(patient -> patientDAO.deletePatient(id))
+                .orElseThrow(() -> new NotFoundException("Patient id = " + id + " not found"));
+
     }
 }

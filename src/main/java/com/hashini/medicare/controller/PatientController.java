@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequestMapping("medicare/v1/patients")
 public class PatientController {
 
     private final PatientService patientService;
@@ -18,23 +19,28 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/patients")
+    @GetMapping()
     public List<Patient> getAllPatients(@RequestParam Optional<String> patientName) {
         return patientService.getAllPatients(patientName);
     }
 
-    @PostMapping("/patients")
-    public Patient addPatient(@RequestBody Patient patient) {
+    @PostMapping()
+    public long addPatient(@RequestBody Patient patient) {
         return patientService.addPatient(patient);
     }
 
-    @GetMapping("/patients/{id}")
+    @GetMapping("/{id}")
     public Patient getPatient(@PathVariable long id) throws NotFoundException {
         return patientService.getPatient(id);
     }
 
-    @PutMapping("/patients/{id}")
-    public Patient editPatient(@RequestBody Patient patient, @PathVariable long id) {
-        return patientService.editPatient(patient, id);
+    @PutMapping("/{id}")
+    public long updatePatient(@RequestBody Patient patient, @PathVariable long id) {
+        return patientService.updatePatient(patient, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public long deletePatient(@PathVariable long id) throws NotFoundException {
+        return patientService.deletePatient(id);
     }
 }

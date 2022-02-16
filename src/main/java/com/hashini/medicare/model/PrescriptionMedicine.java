@@ -1,77 +1,45 @@
 package com.hashini.medicare.model;
 
-import javax.persistence.*;
-
-@Entity
 public class PrescriptionMedicine {
 
-    @EmbeddedId
-    private PrescriptionMedicineKey id;
-
-    @ManyToOne
-    @MapsId("prescriptionId")
-    @JoinColumn(name = "prescription_id")
-    private Prescription prescription;
-
-    @ManyToOne
-    @MapsId("medicineId")
-    @JoinColumn(name = "medicine_id")
-    private Medicine medicine;
-
-    @Column(name = "dose")
+    private long prescription_id;
+    private long medicine_id;
     private String dose;
-    @Column(name = "frequency")
-    private String frequency;
-    @Column(name = "duration")
-    private String duration;
-    @Column(name = "additional_info")
-    private String additionalInfo;
-    @Column(name = "quantity")
+    private int duration;
+    private int frequency;
     private int quantity;
+    private String additionalInfo;
 
-    public PrescriptionMedicine(Prescription prescription,
-                                Medicine medicine,
+    public PrescriptionMedicine(long prescription_id,
+                                long medicine_id,
                                 String dose,
-                                String frequency,
-                                String duration,
-                                String additionalInfo,
-                                int quantity) {
-        this.id = new PrescriptionMedicineKey(prescription.getId(), medicine.getId());
-        this.prescription = prescription;
-        this.medicine = medicine;
+                                int duration,
+                                int frequency,
+                                int quantity,
+                                String additionalInfo) {
+        this.prescription_id = prescription_id;
+        this.medicine_id = medicine_id;
         this.dose = dose;
-        this.frequency = frequency;
         this.duration = duration;
-        this.additionalInfo = additionalInfo;
+        this.frequency = frequency;
         this.quantity = quantity;
+        this.additionalInfo = additionalInfo;
     }
 
-    public PrescriptionMedicine() {
-
+    public long getPrescription_id() {
+        return prescription_id;
     }
 
-    public PrescriptionMedicineKey getId() {
-        return id;
+    public void setPrescription_id(long prescription_id) {
+        this.prescription_id = prescription_id;
     }
 
-    public void setId(PrescriptionMedicineKey id) {
-        this.id = id;
+    public long getMedicine_id() {
+        return medicine_id;
     }
 
-    public Prescription getPrescription() {
-        return prescription;
-    }
-
-    public void setPrescription(Prescription prescription) {
-        this.prescription = prescription;
-    }
-
-    public Medicine getMedicine() {
-        return medicine;
-    }
-
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
+    public void setMedicine_id(long medicine_id) {
+        this.medicine_id = medicine_id;
     }
 
     public String getDose() {
@@ -82,28 +50,20 @@ public class PrescriptionMedicine {
         this.dose = dose;
     }
 
-    public String getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
-    }
-
-    public String getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
-    public String getAdditionalInfo() {
-        return additionalInfo;
+    public int getFrequency() {
+        return frequency;
     }
 
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
     }
 
     public int getQuantity() {
@@ -112,5 +72,13 @@ public class PrescriptionMedicine {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 }

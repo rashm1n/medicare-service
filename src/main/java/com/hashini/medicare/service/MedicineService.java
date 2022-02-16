@@ -1,66 +1,58 @@
 package com.hashini.medicare.service;
 
+import com.hashini.medicare.dao.MedicineDAO;
+import com.hashini.medicare.dao.MedicineTypeDAO;
 import com.hashini.medicare.dto.MedicineDTO;
 import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.mapper.MedicineMapper;
-import com.hashini.medicare.model.Medicine;
 import com.hashini.medicare.model.MedicineType;
-import com.hashini.medicare.repository.MedicineRepository;
-import com.hashini.medicare.repository.MedicineTypeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MedicineService {
 
-    private final MedicineRepository medicineRepository;
-    private final MedicineMapper medicineMapper;
-    private final MedicineTypeRepository medicineTypeRepository;
+    private final MedicineDAO medicineDAO;
+    private final MedicineTypeDAO medicineTypeDAO;
 
-    public MedicineService(MedicineRepository medicineRepository,
-                           MedicineTypeRepository medicineTypeRepository,
-                           MedicineMapper medicineMapper) {
-        this.medicineRepository = medicineRepository;
-        this.medicineTypeRepository = medicineTypeRepository;
-        this.medicineMapper = medicineMapper;
+    public MedicineService(MedicineDAO medicineDAO,
+                           MedicineTypeDAO medicineTypeDAO) {
+        this.medicineDAO = medicineDAO;
+        this.medicineTypeDAO = medicineTypeDAO;
     }
 
     public List<MedicineDTO> getAllMedicines(Optional<String> medicineName) {
-        return medicineName.map(s -> medicineRepository.findByNameIgnoreCaseStartsWith(s)
-                .stream().map(medicineMapper::toMedicineDTO).collect(Collectors.toList())
-        ).orElseGet(() -> medicineRepository.findAll().stream().map(medicineMapper::toMedicineDTO)
-                .collect(Collectors.toList()));
+        return medicineName.map(medicineDAO::selectMedicinesByName).orElseGet(medicineDAO::selectMedicines);
     }
 
     public MedicineDTO getMedicine(long id) throws NotFoundException {
-        return medicineMapper.toMedicineDTO(medicineRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Medicine id = " + id + " not found")));
+        return medicineDAO.selectMedicineById(id)
+                .orElseThrow(() -> new NotFoundException("Medicine id = " + id + " not found"));
     }
 
-    public Medicine addMedicine(MedicineDTO newMedicine) throws NotFoundException {
-        MedicineType type = medicineTypeRepository.findByName(newMedicine.getType()).orElseThrow(() ->
-                new NotFoundException("Medicine Type =" + newMedicine.getType() + " is not found"));
-        return medicineRepository.save(medicineMapper.toMedicine(newMedicine, type));
+    public int addMedicine(MedicineDTO newMedicine) throws NotFoundException {
+        return medicineTypeDAO.selectMedicineTypeByName(newMedicine.getType())
+                .map(medicineType -> medicineDAO.addMedicine(new MedicineMapper().toMedicine(newMedicine, medicineType)))
+                .orElseThrow(() -> new NotFoundException("Medicine type = " + newMedicine.getType() + " is not found"));
     }
 
-    public Medicine updateMedicine(MedicineDTO newMedicine,
-                                   long id) throws NotFoundException {
-        MedicineType type = medicineTypeRepository.findByName(newMedicine.getType()).orElseThrow(() ->
-                new NotFoundException("Medicine Type =" + newMedicine.getType() + " is not found"));
-        return medicineRepository.findById(id)
-                .map(medicine -> {
-                    medicine.setName(newMedicine.getName());
-                    medicine.setUnits(newMedicine.getUnits());
-                    medicine.setUnitPrice(newMedicine.getUnitPrice());
-                    medicine.setMedicineType(type);
-                    return medicineRepository.save(medicine);
-                })
+    public int updateMedicine(MedicineDTO newMedicine,
+                              long id) throws NotFoundException {
+        MedicineType medicineType = medicineTypeDAO.selectMedicineTypeByName(newMedicine.getType())
+                .orElseThrow(() -> new NotFoundException("Medicine Type = " + newMedicine.getType() + " is not found"));
+        return medicineDAO.selectMedicineById(id)
+                .map(medicineDTO -> medicineDAO.updateMedicine(new MedicineMapper().toMedicine(newMedicine, medicineType), id))
                 .orElseGet(() -> {
                     newMedicine.setId(id);
-                    return medicineRepository.save(medicineMapper.toMedicine(newMedicine, type));
+                    return medicineDAO.addMedicine(new MedicineMapper().toMedicine(newMedicine, medicineType));
                 });
+    }
+
+    public int deleteMedicine(long id) {
+        return medicineDAO.selectMedicineById(id)
+                .map(medicine -> medicineDAO.deleteMedicine(id))
+                .orElseThrow(() -> new NotFoundException("Medicine id = " + id + " not found"));
     }
 }
