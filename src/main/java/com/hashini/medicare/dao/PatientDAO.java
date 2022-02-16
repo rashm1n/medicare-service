@@ -1,5 +1,6 @@
 package com.hashini.medicare.dao;
 
+import com.hashini.medicare.dto.PatientDTO;
 import com.hashini.medicare.model.Patient;
 
 import java.util.List;
@@ -7,15 +8,15 @@ import java.util.Optional;
 
 public interface PatientDAO {
 
-    List<Patient> selectPatients();
+    List<PatientDTO> selectPatients();
 
-    List<Patient> selectPatientsByName(String patientName);
+    List<PatientDTO> selectPatientsByName(String patientName);
 
     long addPatient(Patient patient);
 
     long updatePatient(Patient patient, long id);
 
-    Optional<Patient> selectPatientById(long id);
+    Optional<PatientDTO> selectPatientById(long id);
 
     int deletePatient(long id);
 }

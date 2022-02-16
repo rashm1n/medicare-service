@@ -80,4 +80,12 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
+
+    @Override
+    public long updatePrescription(Prescription prescription, long id) {
+        String sql = "UPDATE prescription SET patient_id = ?, date = ?, diagnosis = ? ,processed = ? " +
+                "WHERE prescription_id = ?";
+        return jdbcTemplate.update(sql, prescription.getPatientId(), prescription.getDate(), prescription.getDiagnosis(),
+                prescription.isProcessed(), id);
+    }
 }

@@ -3,6 +3,7 @@ package com.hashini.medicare.controller;
 import com.hashini.medicare.dto.PrescriptionCreationDTO;
 import com.hashini.medicare.dto.PrescriptionDTO;
 import com.hashini.medicare.exception.NotFoundException;
+import com.hashini.medicare.model.Prescription;
 import com.hashini.medicare.service.PrescriptionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +44,10 @@ public class PrescriptionController {
         } catch (NotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @PutMapping("/{id}")
+    public long updatePrescription(@RequestBody Prescription prescription, @PathVariable long id) {
+        return prescriptionService.updatePrescription(prescription, id);
     }
 }

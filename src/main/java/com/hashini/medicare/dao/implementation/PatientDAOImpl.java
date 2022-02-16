@@ -1,6 +1,7 @@
 package com.hashini.medicare.dao.implementation;
 
 import com.hashini.medicare.dao.PatientDAO;
+import com.hashini.medicare.dto.PatientDTO;
 import com.hashini.medicare.mapper.PatientMapper;
 import com.hashini.medicare.model.Patient;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,23 +25,32 @@ public class PatientDAOImpl implements PatientDAO {
     }
 
     @Override
-    public List<Patient> selectPatients() {
-        String sql = "SELECT * FROM patient ORDER BY patient_id DESC";
-        return jdbcTemplate.query(sql, new PatientMapper());
+    public List<PatientDTO> selectPatients() {
+        String sql = "SELECT * " +
+                "FROM patient " +
+                "LEFT JOIN prescription p on patient.patient_id = p.patient_id " +
+                "ORDER BY patient.patient_id DESC";
+        return new ArrayList<>((Objects.requireNonNull(jdbcTemplate.query(sql, new PatientMapper()))).values());
     }
 
     @Override
-    public Optional<Patient> selectPatientById(long id) {
-        String sql = "SELECT * FROM patient WHERE patient_id = ?";
-        return jdbcTemplate.query(sql, new PatientMapper(), id)
+    public Optional<PatientDTO> selectPatientById(long id) {
+        String sql = "SELECT * " +
+                "FROM patient " +
+                "LEFT JOIN prescription p on patient.patient_id = p.patient_id " +
+                "WHERE patient.patient_id = ?";
+        return new ArrayList<>(Objects.requireNonNull(jdbcTemplate.query(sql, new PatientMapper(), id)).values())
                 .stream()
                 .findFirst();
     }
 
     @Override
-    public List<Patient> selectPatientsByName(String patientName) {
-        String sql = "SELECT * FROM patient WHERE LOWER(patient_name) LIKE '%" + patientName.toLowerCase() + "%' ORDER BY patient_id DESC";
-        return jdbcTemplate.query(sql, new PatientMapper());
+    public List<PatientDTO> selectPatientsByName(String patientName) {
+        String sql = "SELECT * " +
+                "FROM patient " +
+                "LEFT JOIN prescription p on patient.patient_id = p.patient_id " +
+                "WHERE LOWER(patient.patient_name) LIKE '%" + patientName.toLowerCase() + "%' ORDER BY patient.patient_id DESC";
+        return new ArrayList<>((Objects.requireNonNull(jdbcTemplate.query(sql, new PatientMapper()))).values());
     }
 
     @Override

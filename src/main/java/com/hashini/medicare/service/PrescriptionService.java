@@ -33,7 +33,7 @@ public class PrescriptionService {
         this.medicineDAO = medicineDAO;
     }
 
-    @Transactional(rollbackFor={NotFoundException.class})
+    @Transactional(rollbackFor = {NotFoundException.class})
     public long addPrescription(PrescriptionCreationDTO prescriptionInfo) {
         return patientDAO.selectPatientById(prescriptionInfo.getPatientId())
                 .map(patient -> {
@@ -64,5 +64,14 @@ public class PrescriptionService {
     public PrescriptionDTO getPrescription(long id) {
         return prescriptionDAO.selectPrescriptionById(id)
                 .orElseThrow(() -> new NotFoundException("Prescription with id = " + id + " not found"));
+    }
+
+    public long updatePrescription(Prescription prescription, long prescriptionId) {
+        return prescriptionDAO.selectPrescriptionById(prescriptionId)
+                .map(patient -> prescriptionDAO.updatePrescription(prescription, prescriptionId))
+                .orElseGet(() -> {
+                    prescription.setId(prescriptionId);
+                    return prescriptionDAO.addPrescription(prescription);
+                });
     }
 }

@@ -1,5 +1,6 @@
 package com.hashini.medicare.controller;
 
+import com.hashini.medicare.dto.PatientDTO;
 import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.model.Patient;
 import com.hashini.medicare.service.PatientService;
@@ -20,7 +21,7 @@ public class PatientController {
     }
 
     @GetMapping()
-    public List<Patient> getAllPatients(@RequestParam Optional<String> patientName) {
+    public List<PatientDTO> getAllPatients(@RequestParam Optional<String> patientName) {
         return patientService.getAllPatients(patientName);
     }
 
@@ -30,7 +31,7 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public Patient getPatient(@PathVariable long id) throws NotFoundException {
+    public PatientDTO getPatient(@PathVariable long id) throws NotFoundException {
         return patientService.getPatient(id);
     }
 

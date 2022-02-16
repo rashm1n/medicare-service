@@ -1,6 +1,7 @@
 package com.hashini.medicare.service;
 
 import com.hashini.medicare.dao.PatientDAO;
+import com.hashini.medicare.dto.PatientDTO;
 import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.model.Patient;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,11 @@ public class PatientService {
         this.patientDAO = patientDAO;
     }
 
-    public List<Patient> getAllPatients(Optional<String> patientName) {
+    public List<PatientDTO> getAllPatients(Optional<String> patientName) {
         return patientName.map(patientDAO::selectPatientsByName).orElseGet(patientDAO::selectPatients);
     }
 
-    public Patient getPatient(long id) throws NotFoundException {
+    public PatientDTO getPatient(long id) throws NotFoundException {
         return patientDAO.selectPatientById(id)
                 .orElseThrow(() -> new NotFoundException("Patient id = " + id + " not found"));
     }
