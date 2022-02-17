@@ -66,12 +66,12 @@ public class PrescriptionService {
                 .orElseThrow(() -> new NotFoundException("Prescription with id = " + id + " not found"));
     }
 
-    public long updatePrescription(Prescription prescription, long prescriptionId) {
+    public long updatePrescription(Prescription newPrescription, long prescriptionId) {
         return prescriptionDAO.selectPrescriptionById(prescriptionId)
-                .map(patient -> prescriptionDAO.updatePrescription(prescription, prescriptionId))
+                .map(prescription -> prescriptionDAO.updatePrescription(newPrescription, prescriptionId))
                 .orElseGet(() -> {
-                    prescription.setId(prescriptionId);
-                    return prescriptionDAO.addPrescription(prescription);
+                    newPrescription.setId(prescriptionId);
+                    return prescriptionDAO.addPrescription(newPrescription);
                 });
     }
 }
