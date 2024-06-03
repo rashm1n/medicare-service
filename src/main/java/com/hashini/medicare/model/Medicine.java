@@ -6,13 +6,15 @@ public class Medicine {
     private String name;
     private float unitPrice;
     private int units;
+    private int minimumUnits;
     private long medicineTypeId;
 
-    public Medicine(long id, String name, float unitPrice, int units, long medicineTypeId) {
+    public Medicine(long id, String name, float unitPrice, int units, int minimumUnits, long medicineTypeId) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
         this.units = units;
+        this.minimumUnits = minimumUnits;
         this.medicineTypeId = medicineTypeId;
     }
 
@@ -46,6 +48,14 @@ public class Medicine {
 
     public void setUnits(int units) {
         this.units = units;
+    }
+
+    public int getMinimumUnits() {
+        return minimumUnits;
+    }
+
+    public void setMinimumUnits(int minimumUnits) {
+        this.minimumUnits = minimumUnits;
     }
 
     public long getMedicineTypeId() {

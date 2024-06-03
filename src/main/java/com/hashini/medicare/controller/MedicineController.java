@@ -20,8 +20,9 @@ public class MedicineController {
     }
 
     @GetMapping()
-    public List<MedicineDTO> getAllMedicines(@RequestParam Optional<String> medicineName) {
-        return medicineService.getAllMedicines(medicineName);
+    public List<MedicineDTO> getAllMedicines(@RequestParam Optional<String> medicineName,
+                                             @RequestParam Optional<Boolean> lowInventory) {
+        return medicineService.getAllMedicines(medicineName, lowInventory.orElse(false));
     }
 
     @GetMapping("/{id}")

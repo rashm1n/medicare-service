@@ -37,6 +37,7 @@ CREATE TABLE medicine
     medicine_name   TEXT  NOT NULL,
     unit_price      FLOAT NOT NULL,
     units           INT   NOT NULL,
+    minimum_units   INT   NOT NULL,
     CONSTRAINT fk_medicine_medicinetype_medicinetype_id FOREIGN KEY (medicinetype_id) REFERENCES medicinetype (medicinetype_id)
 );
 

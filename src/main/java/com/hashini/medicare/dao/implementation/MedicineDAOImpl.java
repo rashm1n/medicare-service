@@ -20,41 +20,47 @@ public class MedicineDAOImpl implements MedicineDAO {
     }
 
     @Override
-    public List<MedicineDTO> selectMedicines() {
+    public List<MedicineDTO> selectMedicinesByLowInventory(Boolean lowInventory) {
         String sql = "SELECT *" +
                 "FROM medicine " +
                 "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
+                "WHERE (? AND medicine.minimum_units >= medicine.units) OR ?" +
                 "ORDER BY medicine_id DESC";
-        return jdbcTemplate.query(sql, new MedicineMapper());
+        return jdbcTemplate.query(sql, new MedicineMapper(), lowInventory, !lowInventory);
     }
 
     @Override
-    public List<MedicineDTO> selectMedicinesByName(String medicineName) {
+    public List<MedicineDTO> selectMedicinesByNameAndLowInventory(String medicineName,
+                                                                  Boolean lowInventory) {
         String sql = "SELECT *" +
                 "FROM medicine " +
                 "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
                 "WHERE LOWER(medicine.medicine_name) LIKE '%" + medicineName.toLowerCase() + "%'" +
+                "AND ((? AND medicine.minimum_units >= medicine.units) OR ?)" +
                 "ORDER BY medicine_id DESC";
-        return jdbcTemplate.query(sql, new MedicineMapper());
+        return jdbcTemplate.query(sql, new MedicineMapper(), lowInventory, !lowInventory);
     }
 
     @Override
     public int addMedicine(Medicine medicine) {
-        String sql = "INSERT INTO medicine(medicine_name,unit_price,units,medicinetype_id) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO medicine(medicine_name,unit_price,units,minimum_units,medicinetype_id) VALUES (?,?,?,?,?)";
         return jdbcTemplate.update(sql,
                 medicine.getName(),
                 medicine.getUnitPrice(),
                 medicine.getUnits(),
+                medicine.getMinimumUnits(),
                 medicine.getMedicineTypeId());
     }
 
     @Override
     public int updateMedicine(Medicine medicine, long id) {
-        String sql = "UPDATE medicine SET medicine_name = ?, unit_price = ?, units = ?, medicinetype_id= ? WHERE medicine_id = ?";
+        String sql = "UPDATE medicine SET medicine_name = ?, unit_price = ?, units = ?, minimum_units = ?, " +
+                "medicinetype_id = ? WHERE medicine_id = ?";
         return jdbcTemplate.update(sql,
                 medicine.getName(),
                 medicine.getUnitPrice(),
                 medicine.getUnits(),
+                medicine.getMinimumUnits(),
                 medicine.getMedicineTypeId(),
                 id);
     }
@@ -81,5 +87,11 @@ public class MedicineDAOImpl implements MedicineDAO {
     public int deleteMedicine(long id) {
         String sql = "DELETE FROM medicine WHERE medicine_id = ?";
         return jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public int updateUnits(long id, int decrementQuantity) {
+        String sql = "UPDATE medicine SET units = units - ? WHERE medicine_id = ?";
+        return jdbcTemplate.update(sql, decrementQuantity, id);
     }
 }

@@ -45,6 +45,7 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                             rs.getString("medicine_name"),
                             rs.getFloat("unit_price"),
                             rs.getInt("units"),
+                            rs.getInt("minimum_units"),
                             rs.getString("type")),
                     rs.getString("dose"),
                     rs.getInt("frequency"),

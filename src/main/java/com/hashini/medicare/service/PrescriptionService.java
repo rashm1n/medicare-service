@@ -42,14 +42,18 @@ public class PrescriptionService {
                             prescriptionInfo.getDiagnosis()));
                     prescriptionInfo.getMedicines()
                             .forEach(medicine -> medicineDAO.selectMedicineByName(medicine.getMedicineName())
-                                    .map(medicineDTO -> prescriptionMedicineDAO.addPrescriptionMedicine(
-                                            new PrescriptionMedicine(prescriptionId,
-                                                    medicineDTO.getId(),
-                                                    medicine.getDose(),
-                                                    medicine.getDuration(),
-                                                    medicine.getFrequency(),
-                                                    medicine.getQuantity(),
-                                                    medicine.getAdditionalInfo())))
+                                    .map(medicineDTO -> {
+                                        PrescriptionMedicine prescriptionMedicine = new PrescriptionMedicine(prescriptionId,
+                                                medicineDTO.getId(),
+                                                medicine.getDose(),
+                                                medicine.getDuration(),
+                                                medicine.getFrequency(),
+                                                medicine.getQuantity(),
+                                                medicine.getAdditionalInfo());
+                                        prescriptionMedicineDAO.addPrescriptionMedicine(prescriptionMedicine);
+                                        medicineDAO.updateUnits(medicineDTO.getId(), medicine.getQuantity());
+                                        return prescriptionMedicine;
+                                    })
                                     .orElseThrow(() -> new NotFoundException("Medicine name = " + medicine.getMedicineName() + " not found")));
                     return prescriptionId;
                 })

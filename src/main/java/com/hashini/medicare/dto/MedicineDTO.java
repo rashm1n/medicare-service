@@ -6,13 +6,15 @@ public class MedicineDTO {
     private String name;
     private float unitPrice;
     private int units;
+    private int minimumUnits;
     private String type;
 
-    public MedicineDTO(long id, String name, float unitPrice, int units, String type) {
+    public MedicineDTO(long id, String name, float unitPrice, int units, int minimumUnits, String type) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
         this.units = units;
+        this.minimumUnits = minimumUnits;
         this.type = type;
     }
 
@@ -38,6 +40,14 @@ public class MedicineDTO {
 
     public void setUnitPrice(float unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public int getMinimumUnits() {
+        return minimumUnits;
+    }
+
+    public void setMinimumUnits(int minimumUnits) {
+        this.minimumUnits = minimumUnits;
     }
 
     public int getUnits() {

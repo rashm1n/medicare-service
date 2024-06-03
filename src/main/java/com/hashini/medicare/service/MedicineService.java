@@ -23,8 +23,10 @@ public class MedicineService {
         this.medicineTypeDAO = medicineTypeDAO;
     }
 
-    public List<MedicineDTO> getAllMedicines(Optional<String> medicineName) {
-        return medicineName.map(medicineDAO::selectMedicinesByName).orElseGet(medicineDAO::selectMedicines);
+    public List<MedicineDTO> getAllMedicines(Optional<String> medicineName,
+                                             Boolean lowInventory) {
+        return medicineName.map(name -> medicineDAO.selectMedicinesByNameAndLowInventory(name, lowInventory)).
+                orElseGet(() -> medicineDAO.selectMedicinesByLowInventory(lowInventory));
     }
 
     public MedicineDTO getMedicine(long id) throws NotFoundException {

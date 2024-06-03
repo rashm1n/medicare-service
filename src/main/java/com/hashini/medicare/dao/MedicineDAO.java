@@ -8,9 +8,10 @@ import java.util.Optional;
 
 public interface MedicineDAO {
 
-    List<MedicineDTO> selectMedicines();
+    List<MedicineDTO> selectMedicinesByLowInventory(Boolean lowInventory);
 
-    List<MedicineDTO> selectMedicinesByName(String medicineName);
+    List<MedicineDTO> selectMedicinesByNameAndLowInventory(String medicineName,
+                                                           Boolean lowInventory);
 
     int addMedicine(Medicine medicine);
 
@@ -21,4 +22,7 @@ public interface MedicineDAO {
     Optional<MedicineDTO> selectMedicineByName(String name);
 
     int deleteMedicine(long id);
+
+    int updateUnits(long id,
+                    int decrementQuantity);
 }
