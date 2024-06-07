@@ -9,6 +9,9 @@ public class MedicineDTO {
     private int minimumUnits;
     private String type;
 
+    public MedicineDTO() {
+    }
+
     public MedicineDTO(long id, String name, float unitPrice, int units, int minimumUnits, String type) {
         this.id = id;
         this.name = name;

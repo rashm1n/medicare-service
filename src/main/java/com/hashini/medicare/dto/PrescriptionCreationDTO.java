@@ -1,22 +1,24 @@
 package com.hashini.medicare.dto;
 
-import java.util.Date;
 import java.util.List;
 
 public class PrescriptionCreationDTO {
 
     private long patientId;
-    private Date date;
     private String diagnosis;
+    private String history;
     private List<PrescriptionMedicineCreationDTO> medicines;
 
+    public PrescriptionCreationDTO() {
+    }
+
     public PrescriptionCreationDTO(long patientId,
-                                   Date date,
                                    String diagnosis,
+                                   String history,
                                    List<PrescriptionMedicineCreationDTO> medicines) {
         this.patientId = patientId;
-        this.date = date;
         this.diagnosis = diagnosis;
+        this.history = history;
         this.medicines = medicines;
     }
 
@@ -28,20 +30,20 @@ public class PrescriptionCreationDTO {
         this.patientId = patientId;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public String getDiagnosis() {
         return diagnosis;
     }
 
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
+    }
+
+    public String getHistory() {
+        return history;
+    }
+
+    public void setHistory(String history) {
+        this.history = history;
     }
 
     public List<PrescriptionMedicineCreationDTO> getMedicines() {

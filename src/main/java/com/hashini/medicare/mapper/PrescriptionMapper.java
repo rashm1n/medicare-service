@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +28,19 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                         rs.getLong("prescription_id"),
                         new Patient(
                                 rs.getLong("patient_id"),
+                                rs.getString("patient_code"),
                                 rs.getString("patient_name"),
                                 rs.getInt("age"),
-                                rs.getString("gender")
+                                rs.getString("gender"),
+                                rs.getString("nic"),
+                                rs.getInt("tp_number"),
+                                rs.getString("address"),
+                                rs.getString("allergies")
                         ),
-                        rs.getDate("date"),
-                        rs.getString("diagnosis"));
+                        rs.getObject("created_date", OffsetDateTime.class),
+                        rs.getString("diagnosis"),
+                        rs.getString("history"),
+                        rs.getBoolean("processed"));
                 prescriptionsById.put(prescription.getId(), prescription);
             }
             List<PrescriptionMedicineDTO> prescriptionMedicineDTOList = prescription.getMedicines();
@@ -49,6 +57,7 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                             rs.getString("type")),
                     rs.getString("dose"),
                     rs.getInt("frequency"),
+                    rs.getString("frequency_text"),
                     rs.getInt("duration"),
                     rs.getString("additional_info"),
                     rs.getInt("quantity")

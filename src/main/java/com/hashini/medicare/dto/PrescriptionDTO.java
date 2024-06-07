@@ -2,22 +2,27 @@ package com.hashini.medicare.dto;
 
 import com.hashini.medicare.model.Patient;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public class PrescriptionDTO {
 
     private long id;
     private Patient patient;
-    private Date date;
+    private OffsetDateTime createdTime;
     private String diagnosis;
+    private String history;
+    private Boolean processed;
     private List<PrescriptionMedicineDTO> medicines;
 
-    public PrescriptionDTO(long id, Patient patient, Date date, String diagnosis) {
+    public PrescriptionDTO(long id, Patient patient, OffsetDateTime createdTime, String diagnosis, String history,
+                           Boolean processed) {
         this.id = id;
         this.patient = patient;
-        this.date = date;
+        this.createdTime = createdTime;
         this.diagnosis = diagnosis;
+        this.history = history;
+        this.processed = processed;
     }
 
     public long getId() {
@@ -36,20 +41,36 @@ public class PrescriptionDTO {
         this.patient = patient;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public String getDiagnosis() {
         return diagnosis;
     }
 
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
+    }
+
+    public OffsetDateTime getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(OffsetDateTime createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getHistory() {
+        return history;
+    }
+
+    public void setHistory(String history) {
+        this.history = history;
+    }
+
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
     }
 
     public List<PrescriptionMedicineDTO> getMedicines() {

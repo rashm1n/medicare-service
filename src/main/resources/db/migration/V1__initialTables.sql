@@ -1,19 +1,25 @@
 CREATE TABLE patient
 (
     patient_id   BIGSERIAL PRIMARY KEY,
+    patient_code TEXT NOT NULL,
     patient_name TEXT NOT NULL,
     age          INT  NOT NULL,
     gender       TEXT NOT NULL,
-    created_date DATE
+    nic          TEXT,
+    address      TEXT,
+    tp_number    INT,
+    allergies    TEXT,
+    created_date TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE prescription
 (
     prescription_id BIGSERIAL PRIMARY KEY,
     patient_id      BIGSERIAL,
-    date            DATE NOT NULL,
     diagnosis       TEXT,
+    history         TEXT,
     processed       BOOLEAN,
+    created_date    TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     CONSTRAINT fk_prescription_patient_patient_id FOREIGN KEY (patient_id) REFERENCES patient (patient_id) ON DELETE CASCADE
 );
 
@@ -26,9 +32,13 @@ CREATE TABLE medicinetype
 INSERT INTO medicinetype(medicinetype_id, type)
 VALUES (1, 'Pill');
 INSERT INTO medicinetype(medicinetype_id, type)
-VALUES (2, 'Cream');
+VALUES (2, 'Capsule');
 INSERT INTO medicinetype(medicinetype_id, type)
-VALUES (3, 'Syrup');
+VALUES (3, 'Cream');
+INSERT INTO medicinetype(medicinetype_id, type)
+VALUES (4, 'Syrup');
+INSERT INTO medicinetype(medicinetype_id, type)
+VALUES (5, 'Drops');
 
 CREATE TABLE medicine
 (
@@ -48,6 +58,7 @@ CREATE TABLE prescription_medicine
     dose            TEXT,
     duration        INT,
     frequency       INT,
+    frequency_text  TEXT,
     quantity        INT,
     additional_info TEXT,
     PRIMARY KEY (prescription_id, medicine_id),

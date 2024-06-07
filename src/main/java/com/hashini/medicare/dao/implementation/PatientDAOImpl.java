@@ -55,14 +55,20 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public long addPatient(Patient patient) {
-        String sql = "INSERT INTO patient(patient_name,age,gender) VALUES (?,?,?)";
+        String sql = "INSERT INTO patient(patient_code,patient_name,age,gender,nic,address,tp_number,allergies) " +
+                "VALUES (?,?,?,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"patient_id"});
-            ps.setString(1, patient.getName());
-            ps.setInt(2, patient.getAge());
-            ps.setString(3, patient.getGender());
+            ps.setString(1, "1");
+            ps.setString(2, patient.getName());
+            ps.setInt(3, patient.getAge());
+            ps.setString(4, patient.getGender());
+            ps.setString(5, patient.getNic());
+            ps.setString(6, patient.getAddress());
+            ps.setInt(7, patient.getTpNumber());
+            ps.setString(8, patient.getAllergies());
             return ps;
         }, keyHolder);
 
@@ -71,8 +77,10 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public long updatePatient(Patient patient, long id) {
-        String sql = "UPDATE patient SET patient_name = ?, age = ?, gender = ? WHERE patient_id = ?";
-        return jdbcTemplate.update(sql, patient.getName(), patient.getAge(), patient.getGender(), id);
+        String sql = "UPDATE patient SET patient_name = ?, age = ?, gender = ?, tp_number = ?, nic = ?, address = ?, " +
+                "allergies = ? WHERE patient_id = ?";
+        return jdbcTemplate.update(sql, patient.getName(), patient.getAge(), patient.getGender(),
+                patient.getTpNumber(), patient.getNic(), patient.getAddress(), patient.getAllergies(), id);
     }
 
     @Override

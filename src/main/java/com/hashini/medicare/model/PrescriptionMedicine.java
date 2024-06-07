@@ -7,6 +7,7 @@ public class PrescriptionMedicine {
     private String dose;
     private int duration;
     private int frequency;
+    private String frequencyText;
     private int quantity;
     private String additionalInfo;
 
@@ -15,6 +16,7 @@ public class PrescriptionMedicine {
                                 String dose,
                                 int duration,
                                 int frequency,
+                                String frequencyText,
                                 int quantity,
                                 String additionalInfo) {
         this.prescription_id = prescription_id;
@@ -22,6 +24,7 @@ public class PrescriptionMedicine {
         this.dose = dose;
         this.duration = duration;
         this.frequency = frequency;
+        this.frequencyText = frequencyText;
         this.quantity = quantity;
         this.additionalInfo = additionalInfo;
     }
@@ -64,6 +67,14 @@ public class PrescriptionMedicine {
 
     public void setFrequency(int frequency) {
         this.frequency = frequency;
+    }
+
+    public String getFrequencyText() {
+        return frequencyText;
+    }
+
+    public void setFrequencyText(String frequencyText) {
+        this.frequencyText = frequencyText;
     }
 
     public int getQuantity() {

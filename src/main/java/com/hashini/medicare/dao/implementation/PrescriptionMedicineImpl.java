@@ -17,13 +17,14 @@ public class PrescriptionMedicineImpl implements PrescriptionMedicineDAO {
     @Override
     public int addPrescriptionMedicine(PrescriptionMedicine prescriptionMedicine) {
         String sql = "INSERT INTO prescription_medicine(prescription_id, medicine_id, dose, duration, " +
-                "frequency, quantity, additional_info) VALUES (?,?,?,?,?,?,?)";
+                "frequency, frequency_text, quantity, additional_info) VALUES (?,?,?,?,?,?,?,?)";
         return jdbcTemplate.update(sql,
                 prescriptionMedicine.getPrescription_id(),
                 prescriptionMedicine.getMedicine_id(),
                 prescriptionMedicine.getDose(),
                 prescriptionMedicine.getDuration(),
                 prescriptionMedicine.getFrequency(),
+                prescriptionMedicine.getFrequencyText(),
                 prescriptionMedicine.getQuantity(),
                 prescriptionMedicine.getAdditionalInfo());
     }

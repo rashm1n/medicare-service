@@ -9,7 +9,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,14 +65,14 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
 
     @Override
     public long addPrescription(Prescription prescription) {
-        String sql = "INSERT INTO prescription (patient_id,date,diagnosis,processed) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO prescription (patient_id,diagnosis,history,processed) VALUES (?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"prescription_id"});
             ps.setLong(1, prescription.getPatientId());
-            ps.setDate(2, new Date(prescription.getDate().getTime()));
-            ps.setString(3, prescription.getDiagnosis());
+            ps.setString(2, prescription.getDiagnosis());
+            ps.setString(3, prescription.getHistory());
             ps.setBoolean(4, prescription.isProcessed());
             return ps;
         }, keyHolder);
@@ -83,9 +82,9 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
 
     @Override
     public long updatePrescription(Prescription prescription, long id) {
-        String sql = "UPDATE prescription SET patient_id = ?, date = ?, diagnosis = ? ,processed = ? " +
+        String sql = "UPDATE prescription SET patient_id = ?, diagnosis = ? ,history = ?, processed = ? " +
                 "WHERE prescription_id = ?";
-        return jdbcTemplate.update(sql, prescription.getPatientId(), prescription.getDate(), prescription.getDiagnosis(),
-                prescription.isProcessed(), id);
+        return jdbcTemplate.update(sql, prescription.getPatientId(), prescription.getDiagnosis(),
+                prescription.getHistory(), prescription.isProcessed(), id);
     }
 }

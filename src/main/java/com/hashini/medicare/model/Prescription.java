@@ -1,19 +1,17 @@
 package com.hashini.medicare.model;
 
-import java.util.Date;
-
 public class Prescription {
 
     private long id;
     private long patientId;
-    private Date date;
     private String diagnosis;
+    private String history;
     private boolean processed;
 
-    public Prescription(long patientId, Date date, String diagnosis) {
+    public Prescription(long patientId, String diagnosis, String history) {
         this.patientId = patientId;
-        this.date = date;
         this.diagnosis = diagnosis;
+        this.history = history;
         this.processed = false;
     }
 
@@ -36,20 +34,20 @@ public class Prescription {
         this.patientId = patientId;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public String getDiagnosis() {
         return diagnosis;
     }
 
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
+    }
+
+    public String getHistory() {
+        return history;
+    }
+
+    public void setHistory(String history) {
+        this.history = history;
     }
 
     public boolean isProcessed() {

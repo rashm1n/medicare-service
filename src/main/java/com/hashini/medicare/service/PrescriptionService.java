@@ -38,23 +38,23 @@ public class PrescriptionService {
         return patientDAO.selectPatientById(prescriptionInfo.getPatientId())
                 .map(patient -> {
                     long prescriptionId = prescriptionDAO.addPrescription(new Prescription(prescriptionInfo.getPatientId(),
-                            prescriptionInfo.getDate(),
-                            prescriptionInfo.getDiagnosis()));
+                            prescriptionInfo.getDiagnosis(), prescriptionInfo.getHistory()));
                     prescriptionInfo.getMedicines()
-                            .forEach(medicine -> medicineDAO.selectMedicineByName(medicine.getMedicineName())
+                            .forEach(medicine -> medicineDAO.selectMedicineById(medicine.getMedicineId())
                                     .map(medicineDTO -> {
                                         PrescriptionMedicine prescriptionMedicine = new PrescriptionMedicine(prescriptionId,
                                                 medicineDTO.getId(),
                                                 medicine.getDose(),
                                                 medicine.getDuration(),
                                                 medicine.getFrequency(),
+                                                medicine.getFrequencyText(),
                                                 medicine.getQuantity(),
                                                 medicine.getAdditionalInfo());
                                         prescriptionMedicineDAO.addPrescriptionMedicine(prescriptionMedicine);
                                         medicineDAO.updateUnits(medicineDTO.getId(), medicine.getQuantity());
                                         return prescriptionMedicine;
                                     })
-                                    .orElseThrow(() -> new NotFoundException("Medicine name = " + medicine.getMedicineName() + " not found")));
+                                    .orElseThrow(() -> new NotFoundException("Medicine id = " + medicine.getMedicineId() + " not found")));
                     return prescriptionId;
                 })
                 .orElseThrow(() -> new NotFoundException("Patient with id = " + prescriptionInfo.getPatientId() + " is not found"));
