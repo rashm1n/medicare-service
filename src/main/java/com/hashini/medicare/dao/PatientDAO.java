@@ -10,7 +10,7 @@ public interface PatientDAO {
 
     List<PatientDTO> selectPatients();
 
-    List<PatientDTO> selectPatientsByName(String patientName);
+    List<PatientDTO> selectPatientsBySearchTerm(String searchTerm);
 
     long addPatient(Patient patient);
 

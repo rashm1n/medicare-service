@@ -12,6 +12,7 @@ import com.hashini.medicare.model.PrescriptionMedicine;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,9 +61,11 @@ public class PrescriptionService {
                 .orElseThrow(() -> new NotFoundException("Patient with id = " + prescriptionInfo.getPatientId() + " is not found"));
     }
 
-    public List<PrescriptionDTO> getAllPrescriptions(Optional<Boolean> processed) {
-        return processed.map(prescriptionDAO::selectPrescriptionsByProcessed)
-                .orElseGet(prescriptionDAO::selectPrescriptions);
+    public List<PrescriptionDTO> getAllPrescriptions(Optional<Boolean> processed,
+                                                     Optional<String> searchTerm,
+                                                     LocalDateTime startDate,
+                                                     LocalDateTime endDate) {
+        return prescriptionDAO.findAllPrescriptions(processed, searchTerm, startDate, endDate);
     }
 
     public PrescriptionDTO getPrescription(long id) {

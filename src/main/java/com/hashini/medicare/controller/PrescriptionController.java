@@ -5,10 +5,12 @@ import com.hashini.medicare.dto.PrescriptionDTO;
 import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.model.Prescription;
 import com.hashini.medicare.service.PrescriptionService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +35,11 @@ public class PrescriptionController {
     }
 
     @GetMapping
-    public List<PrescriptionDTO> getAllPrescriptions(@RequestParam Optional<Boolean> processed) {
-        return prescriptionService.getAllPrescriptions(processed);
+    public List<PrescriptionDTO> getAllPrescriptions(@RequestParam Optional<Boolean> processed,
+                                                     @RequestParam Optional<String> searchTerm,
+                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startDate,
+                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDate) {
+        return prescriptionService.getAllPrescriptions(processed, searchTerm, startDate, endDate);
     }
 
     @GetMapping("/{id}")

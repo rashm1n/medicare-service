@@ -21,8 +21,8 @@ public class PatientController {
     }
 
     @GetMapping()
-    public List<PatientDTO> getAllPatients(@RequestParam Optional<String> patientName) {
-        return patientService.getAllPatients(patientName);
+    public List<PatientDTO> getAllPatients(@RequestParam Optional<String> searchTerm) {
+        return patientService.getAllPatients(searchTerm);
     }
 
     @PostMapping()

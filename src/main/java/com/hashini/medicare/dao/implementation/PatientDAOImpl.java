@@ -35,22 +35,27 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public Optional<PatientDTO> selectPatientById(long id) {
-        String sql = "SELECT * " +
-                "FROM patient " +
-                "LEFT JOIN prescription p on patient.patient_id = p.patient_id " +
-                "WHERE patient.patient_id = ?";
+        String sql = "SELECT p.patient_id, p.patient_code, p.patient_name, p.age, p.gender, p.nic, p.address, " +
+                "p.tp_number, p.allergies, p.created_date, pr.prescription_id, pr.patient_id, pr.diagnosis, pr.history, " +
+                "pr.processed, pr.created_date AS prescription_created_date " +
+                "FROM patient p " +
+                "LEFT JOIN prescription pr on p.patient_id = pr.patient_id " +
+                "WHERE p.patient_id = ?";
         return new ArrayList<>(Objects.requireNonNull(jdbcTemplate.query(sql, new PatientMapper(), id)).values())
                 .stream()
                 .findFirst();
     }
 
     @Override
-    public List<PatientDTO> selectPatientsByName(String patientName) {
+    public List<PatientDTO> selectPatientsBySearchTerm(String searchTerm) {
+        String searchString = "%" + searchTerm.toLowerCase() + "%";
         String sql = "SELECT * " +
                 "FROM patient " +
                 "LEFT JOIN prescription p on patient.patient_id = p.patient_id " +
-                "WHERE LOWER(patient.patient_name) LIKE '%" + patientName.toLowerCase() + "%' ORDER BY patient.patient_id DESC";
-        return new ArrayList<>((Objects.requireNonNull(jdbcTemplate.query(sql, new PatientMapper()))).values());
+                "WHERE (LOWER(patient.patient_name) LIKE ? ) OR (LOWER(patient.nic) LIKE ? ) OR " +
+                "(LOWER(patient.address) LIKE ? ) ORDER BY patient.patient_id DESC";
+        return new ArrayList<>((Objects.requireNonNull(jdbcTemplate.query(sql, new PatientMapper(),
+                searchString, searchString, searchString))).values());
     }
 
     @Override

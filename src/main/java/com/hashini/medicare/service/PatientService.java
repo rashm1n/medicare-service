@@ -18,8 +18,8 @@ public class PatientService {
         this.patientDAO = patientDAO;
     }
 
-    public List<PatientDTO> getAllPatients(Optional<String> patientName) {
-        return patientName.map(patientDAO::selectPatientsByName).orElseGet(patientDAO::selectPatients);
+    public List<PatientDTO> getAllPatients(Optional<String> searchTerm) {
+        return searchTerm.map(patientDAO::selectPatientsBySearchTerm).orElseGet(patientDAO::selectPatients);
     }
 
     public PatientDTO getPatient(long id) throws NotFoundException {
