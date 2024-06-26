@@ -20,36 +20,41 @@ public class MedicineDAOImpl implements MedicineDAO {
     }
 
     @Override
-    public List<MedicineDTO> selectMedicinesByLowInventory(Boolean lowInventory) {
+    public List<MedicineDTO> selectMedicinesByLowInventory(Boolean lowInventory,
+                                                           int cityId) {
         String sql = "SELECT *" +
                 "FROM medicine " +
                 "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
-                "WHERE (? AND medicine.minimum_units >= medicine.units) OR ?" +
+                "WHERE medicine.city_id = ? AND ((? AND medicine.minimum_units >= medicine.units) OR ?)" +
                 "ORDER BY medicine_id DESC";
-        return jdbcTemplate.query(sql, new MedicineMapper(), lowInventory, !lowInventory);
+        return jdbcTemplate.query(sql, new MedicineMapper(), cityId, lowInventory, !lowInventory);
     }
 
     @Override
     public List<MedicineDTO> selectMedicinesByNameAndLowInventory(String medicineName,
-                                                                  Boolean lowInventory) {
+                                                                  Boolean lowInventory,
+                                                                  int cityId) {
         String sql = "SELECT *" +
                 "FROM medicine " +
                 "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
-                "WHERE LOWER(medicine.medicine_name) LIKE '%" + medicineName.toLowerCase() + "%'" +
+                "WHERE medicine.city_id = ? AND LOWER(medicine.medicine_name) LIKE '%" + medicineName.toLowerCase() + "%'" +
                 "AND ((? AND medicine.minimum_units >= medicine.units) OR ?)" +
                 "ORDER BY medicine_id DESC";
-        return jdbcTemplate.query(sql, new MedicineMapper(), lowInventory, !lowInventory);
+        return jdbcTemplate.query(sql, new MedicineMapper(), cityId, lowInventory, !lowInventory);
     }
 
     @Override
-    public int addMedicine(Medicine medicine) {
-        String sql = "INSERT INTO medicine(medicine_name,unit_price,units,minimum_units,medicinetype_id) VALUES (?,?,?,?,?)";
+    public int addMedicine(Medicine medicine,
+                           int cityId) {
+        String sql = "INSERT INTO medicine(medicine_name,unit_price,units,minimum_units,medicinetype_id,city_id) " +
+                "VALUES (?,?,?,?,?,?)";
         return jdbcTemplate.update(sql,
                 medicine.getName(),
                 medicine.getUnitPrice(),
                 medicine.getUnits(),
                 medicine.getMinimumUnits(),
-                medicine.getMedicineTypeId());
+                medicine.getMedicineTypeId(),
+                cityId);
     }
 
     @Override
@@ -66,12 +71,13 @@ public class MedicineDAOImpl implements MedicineDAO {
     }
 
     @Override
-    public Optional<MedicineDTO> selectMedicineById(long id) {
+    public Optional<MedicineDTO> selectMedicineById(long id,
+                                                    int cityId) {
         String sql = "SELECT *" +
                 "FROM medicine " +
                 "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
-                "WHERE medicine.medicine_id = ?";
-        return jdbcTemplate.query(sql, new MedicineMapper(), id).stream().findFirst();
+                "WHERE medicine.medicine_id = ? AND medicine.city_id = ?";
+        return jdbcTemplate.query(sql, new MedicineMapper(), id, cityId).stream().findFirst();
     }
 
     @Override

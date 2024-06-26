@@ -24,36 +24,39 @@ public class MedicineService {
     }
 
     public List<MedicineDTO> getAllMedicines(Optional<String> medicineName,
-                                             Boolean lowInventory) {
-        return medicineName.map(name -> medicineDAO.selectMedicinesByNameAndLowInventory(name, lowInventory)).
-                orElseGet(() -> medicineDAO.selectMedicinesByLowInventory(lowInventory));
+                                             Boolean lowInventory,
+                                             int cityId) {
+        return medicineName.map(name -> medicineDAO.selectMedicinesByNameAndLowInventory(name, lowInventory, cityId)).
+                orElseGet(() -> medicineDAO.selectMedicinesByLowInventory(lowInventory, cityId));
     }
 
-    public MedicineDTO getMedicine(long id) throws NotFoundException {
-        return medicineDAO.selectMedicineById(id)
+    public MedicineDTO getMedicine(long id, int cityId) throws NotFoundException {
+        return medicineDAO.selectMedicineById(id, cityId)
                 .orElseThrow(() -> new NotFoundException("Medicine id = " + id + " not found"));
     }
 
-    public int addMedicine(MedicineDTO newMedicine) throws NotFoundException {
+    public int addMedicine(MedicineDTO newMedicine,
+                           int cityId) throws NotFoundException {
         return medicineTypeDAO.selectMedicineTypeByName(newMedicine.getType())
-                .map(medicineType -> medicineDAO.addMedicine(new MedicineMapper().toMedicine(newMedicine, medicineType)))
+                .map(medicineType -> medicineDAO.addMedicine(new MedicineMapper().toMedicine(newMedicine, medicineType), cityId))
                 .orElseThrow(() -> new NotFoundException("Medicine type = " + newMedicine.getType() + " is not found"));
     }
 
     public int updateMedicine(MedicineDTO newMedicine,
-                              long id) throws NotFoundException {
+                              long id,
+                              int cityId) throws NotFoundException {
         MedicineType medicineType = medicineTypeDAO.selectMedicineTypeByName(newMedicine.getType())
                 .orElseThrow(() -> new NotFoundException("Medicine Type = " + newMedicine.getType() + " is not found"));
-        return medicineDAO.selectMedicineById(id)
+        return medicineDAO.selectMedicineById(id, cityId)
                 .map(medicineDTO -> medicineDAO.updateMedicine(new MedicineMapper().toMedicine(newMedicine, medicineType), id))
                 .orElseGet(() -> {
                     newMedicine.setId(id);
-                    return medicineDAO.addMedicine(new MedicineMapper().toMedicine(newMedicine, medicineType));
+                    return medicineDAO.addMedicine(new MedicineMapper().toMedicine(newMedicine, medicineType), cityId);
                 });
     }
 
-    public int deleteMedicine(long id) {
-        return medicineDAO.selectMedicineById(id)
+    public int deleteMedicine(long id, int cityId) {
+        return medicineDAO.selectMedicineById(id, cityId)
                 .map(medicine -> medicineDAO.deleteMedicine(id))
                 .orElseThrow(() -> new NotFoundException("Medicine id = " + id + " not found"));
     }

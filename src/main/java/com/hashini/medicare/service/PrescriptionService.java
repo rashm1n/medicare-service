@@ -35,13 +35,14 @@ public class PrescriptionService {
     }
 
     @Transactional(rollbackFor = {NotFoundException.class})
-    public long addPrescription(PrescriptionCreationDTO prescriptionInfo) {
-        return patientDAO.selectPatientById(prescriptionInfo.getPatientId())
+    public long addPrescription(PrescriptionCreationDTO prescriptionInfo,
+                                int cityId) {
+        return patientDAO.selectPatientById(prescriptionInfo.getPatientId(), cityId)
                 .map(patient -> {
                     long prescriptionId = prescriptionDAO.addPrescription(new Prescription(prescriptionInfo.getPatientId(),
                             prescriptionInfo.getDiagnosis(), prescriptionInfo.getHistory()));
                     prescriptionInfo.getMedicines()
-                            .forEach(medicine -> medicineDAO.selectMedicineById(medicine.getMedicineId())
+                            .forEach(medicine -> medicineDAO.selectMedicineById(medicine.getMedicineId(), cityId)
                                     .map(medicineDTO -> {
                                         PrescriptionMedicine prescriptionMedicine = new PrescriptionMedicine(prescriptionId,
                                                 medicineDTO.getId(),
@@ -64,17 +65,21 @@ public class PrescriptionService {
     public List<PrescriptionDTO> getAllPrescriptions(Optional<Boolean> processed,
                                                      Optional<String> searchTerm,
                                                      LocalDateTime startDate,
-                                                     LocalDateTime endDate) {
-        return prescriptionDAO.findAllPrescriptions(processed, searchTerm, startDate, endDate);
+                                                     LocalDateTime endDate,
+                                                     int cityId) {
+        return prescriptionDAO.findAllPrescriptions(processed, searchTerm, startDate, endDate, cityId);
     }
 
-    public PrescriptionDTO getPrescription(long id) {
-        return prescriptionDAO.selectPrescriptionById(id)
+    public PrescriptionDTO getPrescription(long id,
+                                           int cityId) {
+        return prescriptionDAO.selectPrescriptionById(id, cityId)
                 .orElseThrow(() -> new NotFoundException("Prescription with id = " + id + " not found"));
     }
 
-    public long updatePrescription(Prescription newPrescription, long prescriptionId) {
-        return prescriptionDAO.selectPrescriptionById(prescriptionId)
+    public long updatePrescription(Prescription newPrescription,
+                                   long prescriptionId,
+                                   int cityId) {
+        return prescriptionDAO.selectPrescriptionById(prescriptionId, cityId)
                 .map(prescription -> prescriptionDAO.updatePrescription(newPrescription, prescriptionId))
                 .orElseGet(() -> {
                     newPrescription.setId(prescriptionId);

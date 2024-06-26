@@ -21,28 +21,33 @@ public class MedicineController {
 
     @GetMapping()
     public List<MedicineDTO> getAllMedicines(@RequestParam Optional<String> medicineName,
-                                             @RequestParam Optional<Boolean> lowInventory) {
-        return medicineService.getAllMedicines(medicineName, lowInventory.orElse(false));
+                                             @RequestParam Optional<Boolean> lowInventory,
+                                             @RequestParam int cityId) {
+        return medicineService.getAllMedicines(medicineName, lowInventory.orElse(false), cityId);
     }
 
     @GetMapping("/{id}")
-    public MedicineDTO getMedicine(@PathVariable long id) throws NotFoundException {
-        return medicineService.getMedicine(id);
+    public MedicineDTO getMedicine(@PathVariable long id,
+                                   @RequestParam int cityId) throws NotFoundException {
+        return medicineService.getMedicine(id, cityId);
     }
 
     @PostMapping()
-    public int addMedicine(@RequestBody MedicineDTO newMedicine) throws NotFoundException {
-        return medicineService.addMedicine(newMedicine);
+    public int addMedicine(@RequestBody MedicineDTO newMedicine,
+                           @RequestParam int cityId) throws NotFoundException {
+        return medicineService.addMedicine(newMedicine, cityId);
     }
 
     @PutMapping("/{id}")
-    public int updateMedicine(@RequestBody MedicineDTO newMedicine, @PathVariable long id) throws NotFoundException {
-        return medicineService.updateMedicine(newMedicine, id);
+    public int updateMedicine(@RequestBody MedicineDTO newMedicine, @PathVariable long id,
+                              @RequestParam int cityId) throws NotFoundException {
+        return medicineService.updateMedicine(newMedicine, id, cityId);
     }
 
     @DeleteMapping("/{id}")
-    public long deleteMedicine(@PathVariable long id) throws NotFoundException {
-        return medicineService.deleteMedicine(id);
+    public long deleteMedicine(@PathVariable long id,
+                               @RequestParam int cityId) throws NotFoundException {
+        return medicineService.deleteMedicine(id, cityId);
     }
 
 }

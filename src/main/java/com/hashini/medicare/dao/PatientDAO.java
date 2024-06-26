@@ -8,15 +8,16 @@ import java.util.Optional;
 
 public interface PatientDAO {
 
-    List<PatientDTO> selectPatients();
+    List<PatientDTO> findAllPatients(Optional<String> searchTerm,
+                                     Optional<String> regNo,
+                                     int cityId);
 
-    List<PatientDTO> selectPatientsBySearchTerm(String searchTerm);
+    PatientDTO addPatient(Patient patient,
+                          int cityId);
 
-    long addPatient(Patient patient);
+    PatientDTO updatePatient(Patient patient, long id);
 
-    long updatePatient(Patient patient, long id);
-
-    Optional<PatientDTO> selectPatientById(long id);
+    Optional<PatientDTO> selectPatientById(long id, int cityId);
 
     int deletePatient(long id);
 }

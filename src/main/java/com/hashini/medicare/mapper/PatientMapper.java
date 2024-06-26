@@ -22,14 +22,16 @@ public class PatientMapper implements ResultSetExtractor<Map<Long, PatientDTO>> 
             PatientDTO patient = patientsById.get(patientId);
             if (patient == null) {
                 patient = new PatientDTO(rs.getLong("patient_id"),
-                        rs.getString("patient_code"),
-                        rs.getString("patient_name"),
+                        rs.getString("reg_no"),
+                        rs.getString("name"),
                         rs.getInt("age"),
                         rs.getString("gender"),
                         rs.getString("nic"),
                         rs.getInt("tp_number"),
                         rs.getString("address"),
-                        rs.getString("allergies"));
+                        rs.getString("allergies"),
+                        rs.getObject("created_date", OffsetDateTime.class),
+                        rs.getObject("updated_date", OffsetDateTime.class));
                 patientsById.put(patient.getId(), patient);
             }
             List<PrescriptionDTO> prescriptions = patient.getPrescriptions();

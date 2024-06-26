@@ -28,8 +28,8 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                         rs.getLong("prescription_id"),
                         new Patient(
                                 rs.getLong("patient_id"),
-                                rs.getString("patient_code"),
-                                rs.getString("patient_name"),
+                                rs.getString("reg_no"),
+                                rs.getString("name"),
                                 rs.getInt("age"),
                                 rs.getString("gender"),
                                 rs.getString("nic"),

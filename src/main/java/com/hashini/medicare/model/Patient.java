@@ -3,7 +3,7 @@ package com.hashini.medicare.model;
 public class Patient {
 
     private long id;
-    private String patientCode;
+    private String regNo;
     private String name;
     private int age;
     private String gender;
@@ -15,10 +15,10 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(long id, String patientCode, String name, int age, String gender, String nic, int tpNumber,
+    public Patient(long id, String regNo, String name, int age, String gender, String nic, int tpNumber,
                    String address, String allergies) {
         this.id = id;
-        this.patientCode = patientCode;
+        this.regNo = regNo;
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -60,12 +60,12 @@ public class Patient {
         this.gender = gender;
     }
 
-    public String getPatientCode() {
-        return patientCode;
+    public String getRegNo() {
+        return regNo;
     }
 
-    public void setPatientCode(String patientCode) {
-        this.patientCode = patientCode;
+    public void setRegNo(String regNo) {
+        this.regNo = regNo;
     }
 
     public int getTpNumber() {

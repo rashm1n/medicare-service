@@ -8,16 +8,19 @@ import java.util.Optional;
 
 public interface MedicineDAO {
 
-    List<MedicineDTO> selectMedicinesByLowInventory(Boolean lowInventory);
+    List<MedicineDTO> selectMedicinesByLowInventory(Boolean lowInventory,
+                                                    int cityId);
 
     List<MedicineDTO> selectMedicinesByNameAndLowInventory(String medicineName,
-                                                           Boolean lowInventory);
+                                                           Boolean lowInventory,
+                                                           int cityId);
 
-    int addMedicine(Medicine medicine);
+    int addMedicine(Medicine medicine,
+                    int cityId);
 
     int updateMedicine(Medicine medicine, long id);
 
-    Optional<MedicineDTO> selectMedicineById(long id);
+    Optional<MedicineDTO> selectMedicineById(long id, int cityId);
 
     Optional<MedicineDTO> selectMedicineByName(String name);
 

@@ -29,32 +29,34 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
     public List<PrescriptionDTO> findAllPrescriptions(Optional<Boolean> processed,
                                                       Optional<String> searchTerm,
                                                       LocalDateTime startDate,
-                                                      LocalDateTime endDate) {
+                                                      LocalDateTime endDate,
+                                                      int cityId) {
         List<Object> params = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * " +
                 "FROM prescription " +
                 "INNER JOIN patient ON prescription.patient_id = patient.patient_id " +
                 "LEFT JOIN prescription_medicine pm on prescription.prescription_id = pm.prescription_id " +
                 "LEFT JOIN medicine m on pm.medicine_id = m.medicine_id " +
-                "LEFT JOIN medicinetype m2 on m2.medicinetype_id = m.medicinetype_id WHERE ");
-        boolean firstCondition = true;
+                "LEFT JOIN medicinetype m2 on m2.medicinetype_id = m.medicinetype_id WHERE patient.city_id = ? ");
+        params.add(cityId);
+//        boolean firstCondition = true;
 
         if (processed.isPresent()) {
-            sql.append("prescription.processed = ?");
+            sql.append("AND prescription.processed = ?");
             params.add(processed.get());
-            firstCondition = false;
+//            firstCondition = false;
         }
 
         if (searchTerm.isPresent()) {
-            if (!firstCondition) sql.append(" AND ");
-            sql.append("LOWER(patient.patient_name) LIKE ? ");
+//            if (!firstCondition) sql.append(" AND ");
+            sql.append(" AND LOWER(patient.name) LIKE ? ");
             params.add("%" + searchTerm.get().toLowerCase() + "%");
-            firstCondition = false;
+//            firstCondition = false;
         }
 
         if (startDate != null && endDate != null) {
-            if (!firstCondition) sql.append(" AND ");
-            sql.append("prescription.created_date BETWEEN ? AND ?");
+//            if (!firstCondition) sql.append(" AND ");
+            sql.append(" AND prescription.created_date BETWEEN ? AND ?");
             params.add(startDate);
             params.add(endDate);
         }
@@ -63,15 +65,16 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
     }
 
     @Override
-    public Optional<PrescriptionDTO> selectPrescriptionById(long id) {
+    public Optional<PrescriptionDTO> selectPrescriptionById(long id, int cityId) {
         String sql = "SELECT *" +
                 "FROM prescription " +
                 "INNER JOIN patient ON prescription.patient_id = patient.patient_id " +
                 "LEFT JOIN prescription_medicine pm on prescription.prescription_id = pm.prescription_id " +
                 "LEFT JOIN medicine m on pm.medicine_id = m.medicine_id " +
                 "LEFT JOIN medicinetype m2 on m2.medicinetype_id = m.medicinetype_id " +
-                "WHERE prescription.prescription_id = ?";
-        return new ArrayList<>(Objects.requireNonNull(jdbcTemplate.query(sql, new PrescriptionMapper(), id)).values())
+                "WHERE prescription.prescription_id = ? AND patient.city_id = ? ";
+        return new ArrayList<>(Objects.requireNonNull(jdbcTemplate.query(sql, new PrescriptionMapper(), id, cityId))
+                .values())
                 .stream()
                 .findFirst();
     }

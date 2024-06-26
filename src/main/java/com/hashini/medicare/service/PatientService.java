@@ -18,30 +18,33 @@ public class PatientService {
         this.patientDAO = patientDAO;
     }
 
-    public List<PatientDTO> getAllPatients(Optional<String> searchTerm) {
-        return searchTerm.map(patientDAO::selectPatientsBySearchTerm).orElseGet(patientDAO::selectPatients);
+    public List<PatientDTO> getAllPatients(Optional<String> searchTerm,
+                                           Optional<String> regNo,
+                                           int cityId) {
+        return patientDAO.findAllPatients(searchTerm, regNo, cityId);
     }
 
-    public PatientDTO getPatient(long id) throws NotFoundException {
-        return patientDAO.selectPatientById(id)
+    public PatientDTO getPatient(long id, int cityId) throws NotFoundException {
+        return patientDAO.selectPatientById(id, cityId)
                 .orElseThrow(() -> new NotFoundException("Patient id = " + id + " not found"));
     }
 
-    public long addPatient(Patient patient) {
-        return patientDAO.addPatient(patient);
+    public PatientDTO addPatient(Patient patient, int cityId) {
+        return patientDAO.addPatient(patient, cityId);
     }
 
-    public long updatePatient(Patient newPatient, long patientId) {
-        return patientDAO.selectPatientById(patientId)
+    public PatientDTO updatePatient(Patient newPatient, long patientId, int cityId) {
+        return patientDAO.selectPatientById(patientId, cityId)
                 .map(patient -> patientDAO.updatePatient(newPatient, patientId))
                 .orElseGet(() -> {
                     newPatient.setId(patientId);
-                    return patientDAO.addPatient(newPatient);
+                    return patientDAO.addPatient(newPatient, cityId);
                 });
     }
 
-    public int deletePatient(long id) throws NotFoundException {
-        return patientDAO.selectPatientById(id)
+    public int deletePatient(long id,
+                             int cityId) throws NotFoundException {
+        return patientDAO.selectPatientById(id, cityId)
                 .map(patient -> patientDAO.deletePatient(id))
                 .orElseThrow(() -> new NotFoundException("Patient id = " + id + " not found"));
 

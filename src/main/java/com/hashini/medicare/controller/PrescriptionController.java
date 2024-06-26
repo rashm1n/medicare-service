@@ -26,9 +26,10 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public long addPrescription(@RequestBody PrescriptionCreationDTO prescriptionInfo) {
+    public long addPrescription(@RequestBody PrescriptionCreationDTO prescriptionInfo,
+                                @RequestParam int cityId) {
         try {
-            return prescriptionService.addPrescription(prescriptionInfo);
+            return prescriptionService.addPrescription(prescriptionInfo, cityId);
         } catch (NotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
@@ -38,21 +39,25 @@ public class PrescriptionController {
     public List<PrescriptionDTO> getAllPrescriptions(@RequestParam Optional<Boolean> processed,
                                                      @RequestParam Optional<String> searchTerm,
                                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startDate,
-                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDate) {
-        return prescriptionService.getAllPrescriptions(processed, searchTerm, startDate, endDate);
+                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDate,
+                                                     @RequestParam int cityId) {
+        return prescriptionService.getAllPrescriptions(processed, searchTerm, startDate, endDate, cityId);
     }
 
     @GetMapping("/{id}")
-    public PrescriptionDTO getPrescription(@PathVariable long id) {
+    public PrescriptionDTO getPrescription(@PathVariable long id,
+                                           @RequestParam int cityId) {
         try {
-            return prescriptionService.getPrescription(id);
+            return prescriptionService.getPrescription(id, cityId);
         } catch (NotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
     }
 
     @PutMapping("/{id}")
-    public long updatePrescription(@RequestBody Prescription prescription, @PathVariable long id) {
-        return prescriptionService.updatePrescription(prescription, id);
+    public long updatePrescription(@RequestBody Prescription prescription,
+                                   @PathVariable long id,
+                                   @RequestParam int cityId) {
+        return prescriptionService.updatePrescription(prescription, id, cityId);
     }
 }

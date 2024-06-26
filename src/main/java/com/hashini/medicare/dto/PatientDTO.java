@@ -1,11 +1,12 @@
 package com.hashini.medicare.dto;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public class PatientDTO {
 
     private long id;
-    private String patientCode;
+    private String regNo;
     private String name;
     private int age;
     private String gender;
@@ -13,12 +14,18 @@ public class PatientDTO {
     private String nic;
     private String address;
     private String allergies;
+
+    private OffsetDateTime createdTime;
+    private OffsetDateTime updatedTime;
     private List<PrescriptionDTO> prescriptions;
 
-    public PatientDTO(long id, String patientCode, String name, int age, String gender, String nic, int tpNumber,
-                      String address, String allergies) {
+    public PatientDTO() {
+    }
+
+    public PatientDTO(long id, String regNo, String name, int age, String gender, String nic, int tpNumber,
+                      String address, String allergies, OffsetDateTime createdTime, OffsetDateTime updatedTime) {
         this.id = id;
-        this.patientCode = patientCode;
+        this.regNo = regNo;
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -26,6 +33,8 @@ public class PatientDTO {
         this.nic = nic;
         this.address = address;
         this.allergies = allergies;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 
     public long getId() {
@@ -60,12 +69,12 @@ public class PatientDTO {
         this.gender = gender;
     }
 
-    public String getPatientCode() {
-        return patientCode;
+    public String getRegNo() {
+        return regNo;
     }
 
-    public void setPatientCode(String patientCode) {
-        this.patientCode = patientCode;
+    public void setRegNo(String regNo) {
+        this.regNo = regNo;
     }
 
     public int getTpNumber() {
@@ -98,6 +107,22 @@ public class PatientDTO {
 
     public void setAllergies(String allergies) {
         this.allergies = allergies;
+    }
+
+    public OffsetDateTime getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(OffsetDateTime createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public OffsetDateTime getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(OffsetDateTime updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public List<PrescriptionDTO> getPrescriptions() {

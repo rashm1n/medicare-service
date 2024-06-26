@@ -21,27 +21,34 @@ public class PatientController {
     }
 
     @GetMapping()
-    public List<PatientDTO> getAllPatients(@RequestParam Optional<String> searchTerm) {
-        return patientService.getAllPatients(searchTerm);
+    public List<PatientDTO> getAllPatients(@RequestParam Optional<String> searchTerm,
+                                           @RequestParam Optional<String> regNo,
+                                           @RequestParam int cityId) {
+        return patientService.getAllPatients(searchTerm, regNo, cityId);
     }
 
     @PostMapping()
-    public long addPatient(@RequestBody Patient patient) {
-        return patientService.addPatient(patient);
+    public PatientDTO addPatient(@RequestBody Patient patient,
+                                 @RequestParam int cityId) {
+        return patientService.addPatient(patient, cityId);
     }
 
     @GetMapping("/{id}")
-    public PatientDTO getPatient(@PathVariable long id) throws NotFoundException {
-        return patientService.getPatient(id);
+    public PatientDTO getPatient(@PathVariable long id,
+                                 @RequestParam int cityId) throws NotFoundException {
+        return patientService.getPatient(id, cityId);
     }
 
     @PutMapping("/{id}")
-    public long updatePatient(@RequestBody Patient patient, @PathVariable long id) {
-        return patientService.updatePatient(patient, id);
+    public PatientDTO updatePatient(@RequestBody Patient patient,
+                                    @PathVariable long id,
+                                    @RequestParam int cityId) {
+        return patientService.updatePatient(patient, id, cityId);
     }
 
     @DeleteMapping("/{id}")
-    public long deletePatient(@PathVariable long id) throws NotFoundException {
-        return patientService.deletePatient(id);
+    public long deletePatient(@PathVariable long id,
+                              @RequestParam int cityId) throws NotFoundException {
+        return patientService.deletePatient(id, cityId);
     }
 }

@@ -11,9 +11,10 @@ public interface PrescriptionDAO {
     List<PrescriptionDTO> findAllPrescriptions(Optional<Boolean> processed,
                                                Optional<String> searchTerm,
                                                LocalDateTime startDate,
-                                               LocalDateTime endDate);
+                                               LocalDateTime endDate,
+                                               int cityId);
 
-    Optional<PrescriptionDTO> selectPrescriptionById(long id);
+    Optional<PrescriptionDTO> selectPrescriptionById(long id, int cityId);
 
     long addPrescription(Prescription prescription);
 
