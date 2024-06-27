@@ -88,4 +88,5 @@ CREATE TABLE prescription_medicine
     CONSTRAINT fk_prescription_medicine_medicine_id FOREIGN KEY (medicine_id) REFERENCES medicine (medicine_id)
 );
 
-CREATE SEQUENCE patient_reg_no_seq START WITH 1;
+CREATE SEQUENCE patient_ella_reg_no_seq START WITH 1;
+CREATE SEQUENCE patient_matara_reg_no_seq START WITH 1;

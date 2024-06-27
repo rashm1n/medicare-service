@@ -38,7 +38,11 @@ public class PatientService {
                 .map(patient -> patientDAO.updatePatient(newPatient, patientId))
                 .orElseGet(() -> {
                     newPatient.setId(patientId);
-                    return patientDAO.addPatient(newPatient, cityId);
+                    try {
+                        return patientDAO.addPatient(newPatient, cityId);
+                    } catch (Exception e) {
+                        throw new NotFoundException("City id = " + cityId + " not found");
+                    }
                 });
     }
 
