@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.hashini</groupId>
     <artifactId>medicare</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>medicare</name>
     <description>Medicare project</description>
     <properties>

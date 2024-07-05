@@ -18,7 +18,7 @@ public class MedicineTypeDAOImpl implements MedicineTypeDAO {
 
     @Override
     public Optional<MedicineType> selectMedicineTypeByName(String name) {
-        String sql = "SELECT * FROM medicinetype WHERE type = ?";
+        String sql = "SELECT * FROM medicinetypes WHERE type = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new MedicineType(
                         rs.getInt("medicinetype_id"),
                         rs.getString("type")), name)

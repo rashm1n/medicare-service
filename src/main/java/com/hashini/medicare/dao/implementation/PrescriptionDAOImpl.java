@@ -33,30 +33,25 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
                                                       int cityId) {
         List<Object> params = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * " +
-                "FROM prescription " +
-                "INNER JOIN patient ON prescription.patient_id = patient.patient_id " +
-                "LEFT JOIN prescription_medicine pm on prescription.prescription_id = pm.prescription_id " +
-                "LEFT JOIN medicine m on pm.medicine_id = m.medicine_id " +
-                "LEFT JOIN medicinetype m2 on m2.medicinetype_id = m.medicinetype_id WHERE patient.city_id = ? ");
+                "FROM prescriptions pr " +
+                "INNER JOIN patients pa ON pr.patient_id = pa.patient_id " +
+                "LEFT JOIN prescription_medicines pm on pr.prescription_id = pm.prescription_id " +
+                "LEFT JOIN medicines m on pm.medicine_id = m.medicine_id " +
+                "LEFT JOIN medicinetypes m2 on m2.medicinetype_id = m.medicinetype_id WHERE pa.city_id = ? ");
         params.add(cityId);
-//        boolean firstCondition = true;
 
         if (processed.isPresent()) {
-            sql.append("AND prescription.processed = ?");
+            sql.append("AND pr.processed = ?");
             params.add(processed.get());
-//            firstCondition = false;
         }
 
         if (searchTerm.isPresent()) {
-//            if (!firstCondition) sql.append(" AND ");
-            sql.append(" AND LOWER(patient.name) LIKE ? ");
+            sql.append(" AND LOWER(pa.name) LIKE ? ");
             params.add("%" + searchTerm.get().toLowerCase() + "%");
-//            firstCondition = false;
         }
 
         if (startDate != null && endDate != null) {
-//            if (!firstCondition) sql.append(" AND ");
-            sql.append(" AND prescription.created_date BETWEEN ? AND ?");
+            sql.append(" AND pr.created_date BETWEEN ? AND ?");
             params.add(startDate);
             params.add(endDate);
         }
@@ -66,13 +61,13 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
 
     @Override
     public Optional<PrescriptionDTO> selectPrescriptionById(long id, int cityId) {
-        String sql = "SELECT *" +
-                "FROM prescription " +
-                "INNER JOIN patient ON prescription.patient_id = patient.patient_id " +
-                "LEFT JOIN prescription_medicine pm on prescription.prescription_id = pm.prescription_id " +
-                "LEFT JOIN medicine m on pm.medicine_id = m.medicine_id " +
-                "LEFT JOIN medicinetype m2 on m2.medicinetype_id = m.medicinetype_id " +
-                "WHERE prescription.prescription_id = ? AND patient.city_id = ? ";
+        String sql = "SELECT * " +
+                "FROM prescriptions pr " +
+                "INNER JOIN patients pa ON pr.patient_id = pa.patient_id " +
+                "LEFT JOIN prescription_medicines pm on pr.prescription_id = pm.prescription_id " +
+                "LEFT JOIN medicines m on pm.medicine_id = m.medicine_id " +
+                "LEFT JOIN medicinetypes m2 on m2.medicinetype_id = m.medicinetype_id " +
+                "WHERE pr.prescription_id = ? AND pa.city_id = ? ";
         return new ArrayList<>(Objects.requireNonNull(jdbcTemplate.query(sql, new PrescriptionMapper(), id, cityId))
                 .values())
                 .stream()
@@ -81,7 +76,7 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
 
     @Override
     public long addPrescription(Prescription prescription) {
-        String sql = "INSERT INTO prescription (patient_id,diagnosis,history,processed) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO prescriptions (patient_id,diagnosis,history,processed) VALUES (?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -98,7 +93,7 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
 
     @Override
     public long updatePrescription(Prescription prescription, long id) {
-        String sql = "UPDATE prescription SET patient_id = ?, diagnosis = ? ,history = ?, processed = ? " +
+        String sql = "UPDATE prescriptions SET patient_id = ?, diagnosis = ? ,history = ?, processed = ? " +
                 "WHERE prescription_id = ?";
         return jdbcTemplate.update(sql, prescription.getPatientId(), prescription.getDiagnosis(),
                 prescription.getHistory(), prescription.isProcessed(), id);

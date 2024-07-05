@@ -23,10 +23,10 @@ public class MedicineDAOImpl implements MedicineDAO {
     public List<MedicineDTO> selectMedicinesByLowInventory(Boolean lowInventory,
                                                            int cityId) {
         String sql = "SELECT *" +
-                "FROM medicine " +
-                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
-                "WHERE medicine.city_id = ? AND ((? AND medicine.minimum_units >= medicine.units) OR ?)" +
-                "ORDER BY medicine_id DESC";
+                "FROM medicines m " +
+                "INNER JOIN medicinetypes mt on mt.medicinetype_id = m.medicinetype_id " +
+                "WHERE m.city_id = ? AND ((? AND m.minimum_units >= m.units) OR ?)" +
+                "ORDER BY m.medicine_id DESC";
         return jdbcTemplate.query(sql, new MedicineMapper(), cityId, lowInventory, !lowInventory);
     }
 
@@ -35,18 +35,18 @@ public class MedicineDAOImpl implements MedicineDAO {
                                                                   Boolean lowInventory,
                                                                   int cityId) {
         String sql = "SELECT *" +
-                "FROM medicine " +
-                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
-                "WHERE medicine.city_id = ? AND LOWER(medicine.medicine_name) LIKE '%" + medicineName.toLowerCase() + "%'" +
-                "AND ((? AND medicine.minimum_units >= medicine.units) OR ?)" +
-                "ORDER BY medicine_id DESC";
+                "FROM medicines m " +
+                "INNER JOIN medicinetypes mt on m.medicinetype_id = mt.medicinetype_id " +
+                "WHERE m.city_id = ? AND LOWER(m.medicine_name) LIKE '%" + medicineName.toLowerCase() + "%'" +
+                "AND ((? AND m.minimum_units >= m.units) OR ?)" +
+                "ORDER BY m.medicine_id DESC";
         return jdbcTemplate.query(sql, new MedicineMapper(), cityId, lowInventory, !lowInventory);
     }
 
     @Override
     public int addMedicine(Medicine medicine,
                            int cityId) {
-        String sql = "INSERT INTO medicine(medicine_name,unit_price,units,minimum_units,medicinetype_id,city_id) " +
+        String sql = "INSERT INTO medicines(medicine_name,unit_price,units,minimum_units,medicinetype_id,city_id) " +
                 "VALUES (?,?,?,?,?,?)";
         return jdbcTemplate.update(sql,
                 medicine.getName(),
@@ -59,7 +59,7 @@ public class MedicineDAOImpl implements MedicineDAO {
 
     @Override
     public int updateMedicine(Medicine medicine, long id) {
-        String sql = "UPDATE medicine SET medicine_name = ?, unit_price = ?, units = ?, minimum_units = ?, " +
+        String sql = "UPDATE medicines SET medicine_name = ?, unit_price = ?, units = ?, minimum_units = ?, " +
                 "medicinetype_id = ? WHERE medicine_id = ?";
         return jdbcTemplate.update(sql,
                 medicine.getName(),
@@ -74,30 +74,30 @@ public class MedicineDAOImpl implements MedicineDAO {
     public Optional<MedicineDTO> selectMedicineById(long id,
                                                     int cityId) {
         String sql = "SELECT *" +
-                "FROM medicine " +
-                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
-                "WHERE medicine.medicine_id = ? AND medicine.city_id = ?";
+                "FROM medicines m " +
+                "INNER JOIN medicinetypes mt on m.medicinetype_id = mt.medicinetype_id " +
+                "WHERE m.medicine_id = ? AND m.city_id = ?";
         return jdbcTemplate.query(sql, new MedicineMapper(), id, cityId).stream().findFirst();
     }
 
     @Override
     public Optional<MedicineDTO> selectMedicineByName(String name) {
         String sql = "SELECT *" +
-                "FROM medicine " +
-                "INNER JOIN medicinetype m on m.medicinetype_id = medicine.medicinetype_id " +
-                "WHERE medicine.medicine_name = ?";
+                "FROM medicines m " +
+                "INNER JOIN medicinetypes mt on m.medicinetype_id = mt.medicinetype_id " +
+                "WHERE m.medicine_name = ?";
         return jdbcTemplate.query(sql, new MedicineMapper(), name).stream().findFirst();
     }
 
     @Override
     public int deleteMedicine(long id) {
-        String sql = "DELETE FROM medicine WHERE medicine_id = ?";
+        String sql = "DELETE FROM medicines WHERE medicine_id = ?";
         return jdbcTemplate.update(sql, id);
     }
 
     @Override
     public int updateUnits(long id, int decrementQuantity) {
-        String sql = "UPDATE medicine SET units = units - ? WHERE medicine_id = ?";
+        String sql = "UPDATE medicines SET units = units - ? WHERE medicine_id = ?";
         return jdbcTemplate.update(sql, decrementQuantity, id);
     }
 }

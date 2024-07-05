@@ -17,13 +17,13 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User findByUsername(String username) {
-        String sql = "SELECT * FROM user_profile WHERE username = ? ";
+        String sql = "SELECT * FROM users WHERE username = ? ";
         return jdbcTemplate.queryForObject(sql, new UserMapper(), username);
     }
 
     @Override
     public void save(User user) {
-        String sql = "UPDATE user_profile SET password = ? WHERE username = ?";
+        String sql = "UPDATE users SET password = ? WHERE username = ?";
         jdbcTemplate.update(sql, user.getPassword(), user.getUsername());
     }
 }

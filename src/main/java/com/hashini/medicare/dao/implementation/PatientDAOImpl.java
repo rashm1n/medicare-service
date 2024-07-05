@@ -32,26 +32,20 @@ public class PatientDAOImpl implements PatientDAO {
                                             Optional<String> regNo,
                                             int cityId) {
         List<Object> params = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM patient WHERE city_id = ? ");
+        StringBuilder sql = new StringBuilder("SELECT * FROM patients " +
+                "WHERE city_id = ? ");
         params.add(cityId);
-//        boolean firstCondition = true;
 
 
         if (searchTerm.isPresent()) {
-            sql.append(" AND ((LOWER(patient.name) LIKE ? ) OR (LOWER(patient.nic) LIKE ? ) OR (LOWER(patient.address) LIKE ?)) ");
+            sql.append(" AND ((LOWER(name) LIKE ? ) OR (LOWER(nic) LIKE ? ) OR (LOWER(address) LIKE ?)) ");
             params.add("%" + searchTerm.get().toLowerCase() + "%");
             params.add("%" + searchTerm.get().toLowerCase() + "%");
             params.add("%" + searchTerm.get().toLowerCase() + "%");
-//            firstCondition = false;
         }
 
         if (regNo.isPresent()) {
-//            if (!firstCondition) {
-//                sql.append(" AND ");
-//            } else {
-//                sql.append(" WHERE ");
-//            }
-            sql.append("AND LOWER(patient.reg_no) LIKE ?");
+            sql.append("AND LOWER(reg_no) LIKE ?");
             params.add("%" + regNo.get().toLowerCase() + "%");
         }
         return jdbcTemplate.query(sql.toString(), new PatientRowMapper(), params.toArray());
@@ -62,7 +56,7 @@ public class PatientDAOImpl implements PatientDAO {
         String sql = "SELECT p.patient_id, p.reg_no, p.name, p.age, p.gender, p.nic, p.address, " +
                 "p.tp_number, p.allergies, p.created_date, p.updated_date, pr.prescription_id, pr.patient_id, " +
                 "pr.diagnosis, pr.history, pr.processed, pr.created_date AS prescription_created_date " +
-                "FROM patient p LEFT JOIN prescription pr on p.patient_id = pr.patient_id " +
+                "FROM patients p LEFT JOIN prescriptions pr on p.patient_id = pr.patient_id " +
                 "WHERE p.patient_id = ? AND p.city_id = ? ";
         return new ArrayList<>(Objects.requireNonNull(jdbcTemplate.query(sql, new PatientMapper(), id, cityId)).values())
                 .stream()
@@ -76,7 +70,7 @@ public class PatientDAOImpl implements PatientDAO {
         String registerNumber;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        String sql = "INSERT INTO patient(reg_no,name,age,gender,nic,address,tp_number,allergies,city_id) " +
+        String sql = "INSERT INTO patients(reg_no,name,age,gender,nic,address,tp_number,allergies,city_id) " +
                 "VALUES (?,?,?,?,?,?,?,?,?)";
         if (cityId == 1) {
             registerNumber = String.format("BKE%06d",
@@ -108,7 +102,7 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public PatientDTO updatePatient(Patient patient, long id) {
-        String sql = "UPDATE patient SET name = ?, age = ?, gender = ?, tp_number = ?, nic = ?, address = ?, " +
+        String sql = "UPDATE patients SET name = ?, age = ?, gender = ?, tp_number = ?, nic = ?, address = ?, " +
                 "allergies = ?, updated_date = CURRENT_TIMESTAMP WHERE patient_id = ?";
         jdbcTemplate.update(sql, patient.getName(), patient.getAge(), patient.getGender(),
                 patient.getTpNumber(), patient.getNic(), patient.getAddress(), patient.getAllergies(), id);
@@ -117,13 +111,13 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public int deletePatient(long id) {
-        String sql = "DELETE FROM patient WHERE patient_id = ?";
+        String sql = "DELETE FROM patients WHERE patient_id = ?";
         return jdbcTemplate.update(sql, id);
     }
 
     private PatientDTO findPatientById(long patientId) {
         String sql = "SELECT patient_id, reg_no, name, age, gender, nic, address, tp_number, " +
-                "allergies, created_date, updated_date FROM patient WHERE patient_id = ?";
+                "allergies, created_date, updated_date FROM patients WHERE patient_id = ?";
         return jdbcTemplate.queryForObject(sql, new PatientRowMapper(), patientId);
     }
 }
