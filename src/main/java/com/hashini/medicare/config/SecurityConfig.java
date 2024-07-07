@@ -1,6 +1,8 @@
 package com.hashini.medicare.config;
 
 import com.hashini.medicare.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,12 +19,15 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+
     public SecurityConfig(UserService userService) {
         this.userService = userService;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        logger.info("Inside configure method");
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/medicare/v1/login").permitAll()
@@ -34,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CorsFilter corsFilter() {
+        logger.info("Inside corsFilter method");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
