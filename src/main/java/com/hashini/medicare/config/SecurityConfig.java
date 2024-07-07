@@ -3,6 +3,7 @@ package com.hashini.medicare.config;
 import com.hashini.medicare.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,9 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
     private final UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
@@ -43,7 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*");
+        config.addAllowedOrigin(frontendUrl);
+        config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
