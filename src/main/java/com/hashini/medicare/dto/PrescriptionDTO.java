@@ -13,16 +13,18 @@ public class PrescriptionDTO {
     private String diagnosis;
     private String history;
     private Boolean processed;
+    private float totalPrice;
     private List<PrescriptionMedicineDTO> medicines;
 
     public PrescriptionDTO(long id, Patient patient, OffsetDateTime createdTime, String diagnosis, String history,
-                           Boolean processed) {
+                           Boolean processed, float totalPrice) {
         this.id = id;
         this.patient = patient;
         this.createdTime = createdTime;
         this.diagnosis = diagnosis;
         this.history = history;
         this.processed = processed;
+        this.totalPrice = totalPrice;
     }
 
     public long getId() {
@@ -71,6 +73,14 @@ public class PrescriptionDTO {
 
     public void setProcessed(Boolean processed) {
         this.processed = processed;
+    }
+
+    public float getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public List<PrescriptionMedicineDTO> getMedicines() {

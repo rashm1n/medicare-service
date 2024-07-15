@@ -42,10 +42,11 @@ public class PatientMapper implements ResultSetExtractor<Map<Long, PatientDTO>> 
             PrescriptionDTO prescriptionDTO = new PrescriptionDTO(
                     rs.getLong("prescription_id"),
                     null,
-                    rs.getObject("created_date", OffsetDateTime.class),
+                    rs.getObject("prescription_created_date", OffsetDateTime.class),
                     rs.getString("diagnosis"),
                     rs.getString("history"),
-                    rs.getBoolean("processed")
+                    rs.getBoolean("processed"),
+                    rs.getFloat("total_price")
             );
             if (prescriptionDTO.getId() != 0) {
                 prescriptions.add(prescriptionDTO);

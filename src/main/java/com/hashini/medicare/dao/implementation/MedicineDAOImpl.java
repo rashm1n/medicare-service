@@ -96,8 +96,8 @@ public class MedicineDAOImpl implements MedicineDAO {
     }
 
     @Override
-    public int updateUnits(long id, int decrementQuantity) {
-        String sql = "UPDATE medicines SET units = units - ? WHERE medicine_id = ?";
-        return jdbcTemplate.update(sql, decrementQuantity, id);
+    public void updateUnits(long id, int quantityDifference) {
+        String sql = "UPDATE medicines SET units = units + ? WHERE medicine_id = ?";
+        jdbcTemplate.update(sql, quantityDifference, id);
     }
 }

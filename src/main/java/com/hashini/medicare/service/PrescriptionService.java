@@ -4,17 +4,19 @@ import com.hashini.medicare.dao.MedicineDAO;
 import com.hashini.medicare.dao.PatientDAO;
 import com.hashini.medicare.dao.PrescriptionDAO;
 import com.hashini.medicare.dao.PrescriptionMedicineDAO;
+import com.hashini.medicare.dto.MedicineQuantityDTO;
 import com.hashini.medicare.dto.PrescriptionCreationDTO;
 import com.hashini.medicare.dto.PrescriptionDTO;
+import com.hashini.medicare.dto.PrescriptionUpdateDTO;
 import com.hashini.medicare.exception.NotFoundException;
 import com.hashini.medicare.model.Prescription;
-import com.hashini.medicare.model.PrescriptionMedicine;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PrescriptionService {
@@ -40,23 +42,13 @@ public class PrescriptionService {
         return patientDAO.selectPatientById(prescriptionInfo.getPatientId(), cityId)
                 .map(patient -> {
                     long prescriptionId = prescriptionDAO.addPrescription(new Prescription(prescriptionInfo.getPatientId(),
-                            prescriptionInfo.getDiagnosis(), prescriptionInfo.getHistory()));
-                    prescriptionInfo.getMedicines()
-                            .forEach(medicine -> medicineDAO.selectMedicineById(medicine.getMedicineId(), cityId)
-                                    .map(medicineDTO -> {
-                                        PrescriptionMedicine prescriptionMedicine = new PrescriptionMedicine(prescriptionId,
-                                                medicineDTO.getId(),
-                                                medicine.getDose(),
-                                                medicine.getDuration(),
-                                                medicine.getFrequency(),
-                                                medicine.getFrequencyText(),
-                                                medicine.getQuantity(),
-                                                medicine.getAdditionalInfo());
-                                        prescriptionMedicineDAO.addPrescriptionMedicine(prescriptionMedicine);
-                                        medicineDAO.updateUnits(medicineDTO.getId(), medicine.getQuantity());
-                                        return prescriptionMedicine;
-                                    })
-                                    .orElseThrow(() -> new NotFoundException("Medicine id = " + medicine.getMedicineId() + " not found")));
+                            prescriptionInfo.getDiagnosis(), prescriptionInfo.getHistory(),
+                            prescriptionInfo.getTotalPrice()));
+                    deductInventory(prescriptionInfo.getMedicines().stream().map(medicine ->
+                            new MedicineQuantityDTO(medicine.getMedicineId(), medicine.getQuantity())
+                    ).collect(Collectors.toList()));
+                    prescriptionMedicineDAO.addPrescriptionMedicines(prescriptionId,
+                            prescriptionInfo.getMedicines());
                     return prescriptionId;
                 })
                 .orElseThrow(() -> new NotFoundException("Patient with id = " + prescriptionInfo.getPatientId() + " is not found"));
@@ -76,14 +68,35 @@ public class PrescriptionService {
                 .orElseThrow(() -> new NotFoundException("Prescription with id = " + id + " not found"));
     }
 
-    public long updatePrescription(Prescription newPrescription,
+    @Transactional(rollbackFor = {NotFoundException.class})
+    public long updatePrescription(PrescriptionUpdateDTO updatedPrescription,
                                    long prescriptionId,
                                    int cityId) {
         return prescriptionDAO.selectPrescriptionById(prescriptionId, cityId)
-                .map(prescription -> prescriptionDAO.updatePrescription(newPrescription, prescriptionId))
-                .orElseGet(() -> {
-                    newPrescription.setId(prescriptionId);
-                    return prescriptionDAO.addPrescription(newPrescription);
-                });
+                .map(prescription -> {
+                    long rowsAffected = prescriptionDAO.updatePrescription(updatedPrescription, prescriptionId);
+                    if (rowsAffected > 0 && updatedPrescription.getMedicines() != null) {
+                        List<MedicineQuantityDTO> originalMedicines = prescriptionMedicineDAO.findByPrescriptionId(prescriptionId);
+                        restoreInventory(originalMedicines);
+                        deductInventory(updatedPrescription.getMedicines().stream().map(medicine ->
+                                new MedicineQuantityDTO(medicine.getMedicineId(), medicine.getQuantity())
+                        ).collect(Collectors.toList()));
+                        prescriptionMedicineDAO.updatePrescriptionMedicines(prescriptionId,
+                                updatedPrescription.getMedicines());
+                    }
+                    return rowsAffected;
+                }).orElseThrow(() -> new NotFoundException("Prescription with id = " + prescriptionId + " not found"));
+    }
+
+    private void restoreInventory(List<MedicineQuantityDTO> medicines) {
+        for (MedicineQuantityDTO medicine : medicines) {
+            medicineDAO.updateUnits(medicine.getMedicineId(), medicine.getQuantity());
+        }
+    }
+
+    private void deductInventory(List<MedicineQuantityDTO> medicines) {
+        for (MedicineQuantityDTO medicine : medicines) {
+            medicineDAO.updateUnits(medicine.getMedicineId(), -medicine.getQuantity());
+        }
     }
 }
