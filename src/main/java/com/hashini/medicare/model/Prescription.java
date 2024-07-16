@@ -7,12 +7,14 @@ public class Prescription {
     private String diagnosis;
     private String history;
     private boolean processed;
+    private float totalPrice;
 
-    public Prescription(long patientId, String diagnosis, String history) {
+    public Prescription(long patientId, String diagnosis, String history, float totalPrice) {
         this.patientId = patientId;
         this.diagnosis = diagnosis;
         this.history = history;
         this.processed = false;
+        this.totalPrice = totalPrice;
     }
 
     public Prescription() {
@@ -56,5 +58,13 @@ public class Prescription {
 
     public void setProcessed(boolean processed) {
         this.processed = processed;
+    }
+
+    public float getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
