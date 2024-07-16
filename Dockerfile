@@ -25,8 +25,8 @@ FROM debian:buster-slim
 
 # Set the working directory
 WORKDIR /app
-RUN addgroup -g 10014 medicare && \
-    adduser  --disabled-password  --no-create-home --uid 10014 --ingroup medicare medicareuser
+RUN addgroup --gid 10014 medicare && \
+    adduser --disabled-password --no-create-home --uid 10014 --ingroup medicare medicareuser
 
 # Copy the native executable from the builder stage
 COPY --from=builder /app/target/medicare .
@@ -34,6 +34,7 @@ COPY --from=builder /app/target/medicare .
 # Set the executable bit (if needed)
 RUN chmod +x medicare
 USER 10014
+
 # Define the entry point for the container
 ENTRYPOINT ["./medicare"]
 
