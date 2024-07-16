@@ -1,14 +1,31 @@
-FROM maven:3.8.5-openjdk-8-slim AS build
+# First stage: Build the native image
+FROM ghcr.io/graalvm/native-image:latest as builder
+
+# Set the working directory
 WORKDIR /app
+
+# Copy the Maven project files
 COPY pom.xml .
 COPY src ./src
-RUN mvn clean package -DskipTests
 
-FROM openjdk:8-jdk-alpine
+# Install Maven dependencies and build the native image
+RUN gu install native-image
+RUN mvn -Pnative native:compile
+
+# Second stage: Create the runtime image
+FROM debian:buster-slim
+
+# Set the working directory
 WORKDIR /app
-RUN addgroup -g 10014 medicare && \
-    adduser  --disabled-password  --no-create-home --uid 10014 --ingroup medicare medicareuser
-COPY --from=build /app/target/medicare-1.0.0.jar app.jar
-USER 10014
+
+# Copy the native executable from the builder stage
+COPY --from=builder /app/target/medicare .
+
+# Set the executable bit (if needed)
+RUN chmod +x medicare
+
+# Define the entry point for the container
+ENTRYPOINT ["./medicare"]
+
+# Expose any ports your application uses (if needed)
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
