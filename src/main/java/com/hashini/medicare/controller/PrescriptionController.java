@@ -2,8 +2,8 @@ package com.hashini.medicare.controller;
 
 import com.hashini.medicare.dto.PrescriptionCreationDTO;
 import com.hashini.medicare.dto.PrescriptionDTO;
+import com.hashini.medicare.dto.PrescriptionUpdateDTO;
 import com.hashini.medicare.exception.NotFoundException;
-import com.hashini.medicare.model.Prescription;
 import com.hashini.medicare.service.PrescriptionService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -54,7 +54,7 @@ public class PrescriptionController {
     }
 
     @PutMapping("/{id}")
-    public long updatePrescription(@RequestBody Prescription prescription,
+    public long updatePrescription(@RequestBody PrescriptionUpdateDTO prescription,
                                    @PathVariable long id,
                                    @RequestParam int cityId) {
         return prescriptionService.updatePrescription(prescription, id, cityId);

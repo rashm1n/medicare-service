@@ -1,6 +1,6 @@
 package com.hashini.medicare.dto;
 
-public class PrescriptionMedicineCreationDTO {
+public class PrescriptionMedicineUpdateDTO {
 
     private int medicineId;
     private String dose;
@@ -9,19 +9,20 @@ public class PrescriptionMedicineCreationDTO {
     private int duration;
     private String additionalInfo;
     private int quantity;
+
     private float price;
 
-    public PrescriptionMedicineCreationDTO() {
+    public PrescriptionMedicineUpdateDTO() {
     }
 
-    public PrescriptionMedicineCreationDTO(int medicineId,
-                                           String dose,
-                                           int frequency,
-                                           String frequencyText,
-                                           int duration,
-                                           String additionalInfo,
-                                           int quantity,
-                                           float price) {
+    public PrescriptionMedicineUpdateDTO(int medicineId,
+                                         String dose,
+                                         int frequency,
+                                         String frequencyText,
+                                         int duration,
+                                         String additionalInfo,
+                                         int quantity,
+                                         float price) {
         this.medicineId = medicineId;
         this.dose = dose;
         this.frequency = frequency;

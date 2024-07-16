@@ -3,20 +3,25 @@ package com.hashini.medicare.dto;
 public class PrescriptionMedicineDTO {
 
     private MedicineDTO medicine;
+    private long id;
     private String dose;
     private int frequency;
     private String frequencyText;
     private int duration;
     private String additionalInfo;
     private int quantity;
+    private float price;
 
     public PrescriptionMedicineDTO(MedicineDTO medicine,
+                                   long id,
                                    String dose,
                                    int frequency,
                                    String frequencyText,
                                    int duration,
                                    String additionalInfo,
-                                   int quantity) {
+                                   int quantity,
+                                   float price) {
+        this.id = id;
         this.medicine = medicine;
         this.dose = dose;
         this.frequency = frequency;
@@ -24,6 +29,15 @@ public class PrescriptionMedicineDTO {
         this.duration = duration;
         this.additionalInfo = additionalInfo;
         this.quantity = quantity;
+        this.price = price;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public MedicineDTO getMedicine() {
@@ -80,5 +94,13 @@ public class PrescriptionMedicineDTO {
 
     public void setFrequencyText(String frequencyText) {
         this.frequencyText = frequencyText;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 }

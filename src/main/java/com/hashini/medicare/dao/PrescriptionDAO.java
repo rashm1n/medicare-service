@@ -1,6 +1,8 @@
 package com.hashini.medicare.dao;
 
+import com.hashini.medicare.dto.PrescriptionAnalyticsDTO;
 import com.hashini.medicare.dto.PrescriptionDTO;
+import com.hashini.medicare.dto.PrescriptionUpdateDTO;
 import com.hashini.medicare.model.Prescription;
 
 import java.time.LocalDateTime;
@@ -18,5 +20,10 @@ public interface PrescriptionDAO {
 
     long addPrescription(Prescription prescription);
 
-    long updatePrescription(Prescription prescription, long id);
+    long updatePrescription(PrescriptionUpdateDTO prescription, long id);
+
+    PrescriptionAnalyticsDTO getTotalRevenueAndCount(LocalDateTime startDate,
+                                                     LocalDateTime endDate,
+                                                     int cityId);
+
 }

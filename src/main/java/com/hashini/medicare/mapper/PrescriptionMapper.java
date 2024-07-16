@@ -40,7 +40,8 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                         rs.getObject("created_date", OffsetDateTime.class),
                         rs.getString("diagnosis"),
                         rs.getString("history"),
-                        rs.getBoolean("processed"));
+                        rs.getBoolean("processed"),
+                        rs.getFloat("total_price"));
                 prescriptionsById.put(prescription.getId(), prescription);
             }
             List<PrescriptionMedicineDTO> prescriptionMedicineDTOList = prescription.getMedicines();
@@ -55,12 +56,14 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                             rs.getInt("units"),
                             rs.getInt("minimum_units"),
                             rs.getString("type")),
+                    rs.getLong("id"),
                     rs.getString("dose"),
                     rs.getInt("frequency"),
                     rs.getString("frequency_text"),
                     rs.getInt("duration"),
                     rs.getString("additional_info"),
-                    rs.getInt("quantity")
+                    rs.getInt("quantity"),
+                    rs.getFloat("price")
             );
             prescriptionMedicineDTOList.add(prescriptionMedicineDTO);
         }

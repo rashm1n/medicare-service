@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +56,7 @@ public class PatientDAOImpl implements PatientDAO {
     public Optional<PatientDTO> selectPatientById(long id, int cityId) {
         String sql = "SELECT p.patient_id, p.reg_no, p.name, p.age, p.gender, p.nic, p.address, " +
                 "p.tp_number, p.allergies, p.created_date, p.updated_date, pr.prescription_id, pr.patient_id, " +
-                "pr.diagnosis, pr.history, pr.processed, pr.created_date AS prescription_created_date " +
+                "pr.diagnosis, pr.history, pr.processed, pr.created_date AS prescription_created_date, pr.total_price " +
                 "FROM patients p LEFT JOIN prescriptions pr on p.patient_id = pr.patient_id " +
                 "WHERE p.patient_id = ? AND p.city_id = ? ";
         return new ArrayList<>(Objects.requireNonNull(jdbcTemplate.query(sql, new PatientMapper(), id, cityId)).values())
@@ -113,6 +114,12 @@ public class PatientDAOImpl implements PatientDAO {
     public int deletePatient(long id) {
         String sql = "DELETE FROM patients WHERE patient_id = ?";
         return jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public int getCount(LocalDateTime startDate, LocalDateTime endDate, int cityId) {
+        String sql = "SELECT COUNT(*) FROM patients p WHERE p.city_id = ? AND p.created_date BETWEEN ? AND ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{cityId, startDate, endDate}, Integer.class);
     }
 
     private PatientDTO findPatientById(long patientId) {

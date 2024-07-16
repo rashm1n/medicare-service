@@ -7,6 +7,7 @@ public class PrescriptionCreationDTO {
     private long patientId;
     private String diagnosis;
     private String history;
+    private float totalPrice;
     private List<PrescriptionMedicineCreationDTO> medicines;
 
     public PrescriptionCreationDTO() {
@@ -15,11 +16,13 @@ public class PrescriptionCreationDTO {
     public PrescriptionCreationDTO(long patientId,
                                    String diagnosis,
                                    String history,
+                                   float totalPrice,
                                    List<PrescriptionMedicineCreationDTO> medicines) {
         this.patientId = patientId;
         this.diagnosis = diagnosis;
         this.history = history;
         this.medicines = medicines;
+        this.totalPrice = totalPrice;
     }
 
     public long getPatientId() {
@@ -44,6 +47,14 @@ public class PrescriptionCreationDTO {
 
     public void setHistory(String history) {
         this.history = history;
+    }
+
+    public float getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public List<PrescriptionMedicineCreationDTO> getMedicines() {
