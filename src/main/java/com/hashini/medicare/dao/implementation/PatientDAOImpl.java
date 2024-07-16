@@ -56,7 +56,8 @@ public class PatientDAOImpl implements PatientDAO {
     public Optional<PatientDTO> selectPatientById(long id, int cityId) {
         String sql = "SELECT p.patient_id, p.reg_no, p.name, p.age, p.gender, p.nic, p.address, " +
                 "p.tp_number, p.allergies, p.created_date, p.updated_date, pr.prescription_id, pr.patient_id, " +
-                "pr.diagnosis, pr.history, pr.processed, pr.created_date AS prescription_created_date, pr.total_price " +
+                "pr.diagnosis, pr.history, pr.processed, pr.created_date AS prescription_created_date, pr.total_price, " +
+                "pr.consultation_info, pr.consultation_fee, pr.investigation_info, pr.investigation_fee " +
                 "FROM patients p LEFT JOIN prescriptions pr on p.patient_id = pr.patient_id " +
                 "WHERE p.patient_id = ? AND p.city_id = ? ";
         return new ArrayList<>(Objects.requireNonNull(jdbcTemplate.query(sql, new PatientMapper(), id, cityId)).values())

@@ -2,10 +2,10 @@ package com.hashini.medicare.dao.implementation;
 
 import com.hashini.medicare.dao.PrescriptionDAO;
 import com.hashini.medicare.dto.PrescriptionAnalyticsDTO;
+import com.hashini.medicare.dto.PrescriptionCreationDTO;
 import com.hashini.medicare.dto.PrescriptionDTO;
 import com.hashini.medicare.dto.PrescriptionUpdateDTO;
 import com.hashini.medicare.mapper.PrescriptionMapper;
-import com.hashini.medicare.model.Prescription;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -77,9 +77,10 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
     }
 
     @Override
-    public long addPrescription(Prescription prescription) {
-        String sql = "INSERT INTO prescriptions (patient_id,diagnosis,history,processed,total_price) " +
-                "VALUES (?,?,?,?,?)";
+    public long addPrescription(PrescriptionCreationDTO prescription) {
+        String sql = "INSERT INTO prescriptions (patient_id,diagnosis,history,processed,total_price,consultation_info," +
+                "consultation_fee,investigation_info,investigation_fee) " +
+                "VALUES (?,?,?,?,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -87,8 +88,12 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
             ps.setLong(1, prescription.getPatientId());
             ps.setString(2, prescription.getDiagnosis());
             ps.setString(3, prescription.getHistory());
-            ps.setBoolean(4, prescription.isProcessed());
+            ps.setBoolean(4, false);
             ps.setFloat(5, prescription.getTotalPrice());
+            ps.setString(6, prescription.getConsultationInfo());
+            ps.setFloat(7, prescription.getConsultationFee());
+            ps.setString(8, prescription.getInvestigationInfo());
+            ps.setFloat(9, prescription.getInvestigationFee());
             return ps;
         }, keyHolder);
 
@@ -112,6 +117,26 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
         if (prescription.getTotalPrice() != null) {
             sql.append("total_price = ?, ");
             params.add(prescription.getTotalPrice());
+        }
+
+        if (prescription.getConsultationInfo() != null) {
+            sql.append("consultation_info = ?, ");
+            params.add(prescription.getConsultationInfo());
+        }
+
+        if (prescription.getConsultationFee() != null) {
+            sql.append("consultation_fee = ?, ");
+            params.add(prescription.getConsultationFee());
+        }
+
+        if (prescription.getInvestigationInfo() != null) {
+            sql.append("investigation_info = ?, ");
+            params.add(prescription.getInvestigationInfo());
+        }
+
+        if (prescription.getInvestigationFee() != null) {
+            sql.append("investigation_fee = ?, ");
+            params.add(prescription.getInvestigationFee());
         }
 
         if (prescription.getProcessed() != null) {

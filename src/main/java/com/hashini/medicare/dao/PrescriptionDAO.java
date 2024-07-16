@@ -1,9 +1,9 @@
 package com.hashini.medicare.dao;
 
 import com.hashini.medicare.dto.PrescriptionAnalyticsDTO;
+import com.hashini.medicare.dto.PrescriptionCreationDTO;
 import com.hashini.medicare.dto.PrescriptionDTO;
 import com.hashini.medicare.dto.PrescriptionUpdateDTO;
-import com.hashini.medicare.model.Prescription;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +18,7 @@ public interface PrescriptionDAO {
 
     Optional<PrescriptionDTO> selectPrescriptionById(long id, int cityId);
 
-    long addPrescription(Prescription prescription);
+    long addPrescription(PrescriptionCreationDTO prescription);
 
     long updatePrescription(PrescriptionUpdateDTO prescription, long id);
 

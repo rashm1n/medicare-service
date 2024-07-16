@@ -46,7 +46,12 @@ public class PatientMapper implements ResultSetExtractor<Map<Long, PatientDTO>> 
                     rs.getString("diagnosis"),
                     rs.getString("history"),
                     rs.getBoolean("processed"),
-                    rs.getFloat("total_price")
+                    rs.getFloat("total_price"),
+                    rs.getString("consultation_info"),
+                    rs.getFloat("consultation_fee"),
+                    rs.getString("investigation_info"),
+                    rs.getFloat("investigation_fee"),
+                    new ArrayList<>()
             );
             if (prescriptionDTO.getId() != 0) {
                 prescriptions.add(prescriptionDTO);

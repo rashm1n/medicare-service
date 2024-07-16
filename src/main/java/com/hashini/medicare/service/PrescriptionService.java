@@ -9,7 +9,6 @@ import com.hashini.medicare.dto.PrescriptionCreationDTO;
 import com.hashini.medicare.dto.PrescriptionDTO;
 import com.hashini.medicare.dto.PrescriptionUpdateDTO;
 import com.hashini.medicare.exception.NotFoundException;
-import com.hashini.medicare.model.Prescription;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,9 +40,7 @@ public class PrescriptionService {
                                 int cityId) {
         return patientDAO.selectPatientById(prescriptionInfo.getPatientId(), cityId)
                 .map(patient -> {
-                    long prescriptionId = prescriptionDAO.addPrescription(new Prescription(prescriptionInfo.getPatientId(),
-                            prescriptionInfo.getDiagnosis(), prescriptionInfo.getHistory(),
-                            prescriptionInfo.getTotalPrice()));
+                    long prescriptionId = prescriptionDAO.addPrescription(prescriptionInfo);
                     deductInventory(prescriptionInfo.getMedicines().stream().map(medicine ->
                             new MedicineQuantityDTO(medicine.getMedicineId(), medicine.getQuantity())
                     ).collect(Collectors.toList()));
