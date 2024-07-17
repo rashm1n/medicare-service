@@ -14,10 +14,16 @@ public class PrescriptionDTO {
     private String history;
     private Boolean processed;
     private float totalPrice;
+    private String consultationInfo;
+    private float consultationFee;
+    private String investigationInfo;
+    private float investigationFee;
     private List<PrescriptionMedicineDTO> medicines;
 
     public PrescriptionDTO(long id, Patient patient, OffsetDateTime createdTime, String diagnosis, String history,
-                           Boolean processed, float totalPrice) {
+                           Boolean processed, float totalPrice, String consultationInfo,
+                           float consultationFee, String investigationInfo, float investigationFee,
+                           List<PrescriptionMedicineDTO> medicines) {
         this.id = id;
         this.patient = patient;
         this.createdTime = createdTime;
@@ -25,6 +31,11 @@ public class PrescriptionDTO {
         this.history = history;
         this.processed = processed;
         this.totalPrice = totalPrice;
+        this.consultationInfo = consultationInfo;
+        this.consultationFee = consultationFee;
+        this.investigationInfo = investigationInfo;
+        this.investigationFee = investigationFee;
+        this.medicines = medicines;
     }
 
     public long getId() {
@@ -81,6 +92,38 @@ public class PrescriptionDTO {
 
     public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getConsultationInfo() {
+        return consultationInfo;
+    }
+
+    public void setConsultationInfo(String consultationInfo) {
+        this.consultationInfo = consultationInfo;
+    }
+
+    public float getConsultationFee() {
+        return consultationFee;
+    }
+
+    public void setConsultationFee(float consultationFee) {
+        this.consultationFee = consultationFee;
+    }
+
+    public String getInvestigationInfo() {
+        return investigationInfo;
+    }
+
+    public void setInvestigationInfo(String investigationInfo) {
+        this.investigationInfo = investigationInfo;
+    }
+
+    public float getInvestigationFee() {
+        return investigationFee;
+    }
+
+    public void setInvestigationFee(float investigationFee) {
+        this.investigationFee = investigationFee;
     }
 
     public List<PrescriptionMedicineDTO> getMedicines() {

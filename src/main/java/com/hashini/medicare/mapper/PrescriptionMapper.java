@@ -23,7 +23,7 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
         while (rs.next()) {
             long prescriptionId = rs.getLong("prescription_id");
             PrescriptionDTO prescription = prescriptionsById.get(prescriptionId);
-            if (prescriptionsById.get(prescriptionId) == null) {
+            if (prescription == null) {
                 prescription = new PrescriptionDTO(
                         rs.getLong("prescription_id"),
                         new Patient(
@@ -41,31 +41,38 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                         rs.getString("diagnosis"),
                         rs.getString("history"),
                         rs.getBoolean("processed"),
-                        rs.getFloat("total_price"));
+                        rs.getFloat("total_price"),
+                        rs.getString("consultation_info"),
+                        rs.getFloat("consultation_fee"),
+                        rs.getString("investigation_info"),
+                        rs.getFloat("investigation_fee"),
+                        new ArrayList<>());
                 prescriptionsById.put(prescription.getId(), prescription);
             }
-            List<PrescriptionMedicineDTO> prescriptionMedicineDTOList = prescription.getMedicines();
-            if (prescriptionMedicineDTOList == null) {
-                prescriptionMedicineDTOList = new ArrayList<>();
-                prescription.setMedicines(prescriptionMedicineDTOList);
+            if (rs.getLong("medicine_id") != 0) {
+                List<PrescriptionMedicineDTO> prescriptionMedicineDTOList = prescription.getMedicines();
+                if (prescriptionMedicineDTOList == null) {
+                    prescriptionMedicineDTOList = new ArrayList<>();
+                    prescription.setMedicines(prescriptionMedicineDTOList);
+                }
+                PrescriptionMedicineDTO prescriptionMedicineDTO = new PrescriptionMedicineDTO(
+                        new MedicineDTO(rs.getLong("medicine_id"),
+                                rs.getString("medicine_name"),
+                                rs.getFloat("unit_price"),
+                                rs.getInt("units"),
+                                rs.getInt("minimum_units"),
+                                rs.getString("type")),
+                        rs.getLong("id"),
+                        rs.getString("dose"),
+                        rs.getInt("frequency"),
+                        rs.getString("frequency_text"),
+                        rs.getInt("duration"),
+                        rs.getString("additional_info"),
+                        rs.getInt("quantity"),
+                        rs.getFloat("price")
+                );
+                prescriptionMedicineDTOList.add(prescriptionMedicineDTO);
             }
-            PrescriptionMedicineDTO prescriptionMedicineDTO = new PrescriptionMedicineDTO(
-                    new MedicineDTO(rs.getLong("medicine_id"),
-                            rs.getString("medicine_name"),
-                            rs.getFloat("unit_price"),
-                            rs.getInt("units"),
-                            rs.getInt("minimum_units"),
-                            rs.getString("type")),
-                    rs.getLong("id"),
-                    rs.getString("dose"),
-                    rs.getInt("frequency"),
-                    rs.getString("frequency_text"),
-                    rs.getInt("duration"),
-                    rs.getString("additional_info"),
-                    rs.getInt("quantity"),
-                    rs.getFloat("price")
-            );
-            prescriptionMedicineDTOList.add(prescriptionMedicineDTO);
         }
         return prescriptionsById;
     }
