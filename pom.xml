@@ -69,7 +69,7 @@
                 <configuration>
                     <imageName>${project.artifactId}</imageName>
                     <options>
-                        <option>-J-Xmx4G</option>
+                        <option>-J-Xmx8G</option>
                         <option>-H:+ReportExceptionStackTraces</option>
                     </options>
                 </configuration>
