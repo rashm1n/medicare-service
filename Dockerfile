@@ -1,8 +1,9 @@
 # Use the official GraalVM image as the base image for native build
-FROM ghcr.io/graalvm/native-image:ol8-java17-22.3.1 as builder
+FROM ghcr.io/graalvm/graalvm-ce:ol7-java17-22.3.3 as builder
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
+COPY mvnw .
 RUN ./mvnw package -Pnative -DskipTests
 
 FROM busybox:glibc
