@@ -9,9 +9,10 @@ RUN mvn -Pnative clean package
 
 FROM oraclelinux:9-slim
 WORKDIR /app
-RUN addgroup --gid 10014 medicare && \
-    adduser --disabled-password --no-create-home --uid 10014 --ingroup medicare medicareuser
-COPY --from=builder /app/target/medicare ./medicare
-USER 10014
+RUN groupadd -g 10014 medicare && \
+    useradd -r -u 10014 -g medicare medicareuser
+COPY --from=builder /app/target/medicare .
+RUN chmod +x medicare
+USER medicareuser
 EXPOSE 8080
 CMD ["./medicare"]
