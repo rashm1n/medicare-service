@@ -23,7 +23,7 @@ public class PrescriptionMedicineImpl implements PrescriptionMedicineDAO {
     public List<MedicineQuantityDTO> findByPrescriptionId(long prescriptionId) {
         String sql = "SELECT medicine_id, quantity FROM prescription_medicines WHERE prescription_id = ?";
         return jdbcTemplate.query(sql, new Object[]{prescriptionId}, (rs, rowNum) ->
-                new MedicineQuantityDTO(rs.getInt("medicine_id"), rs.getInt("quantity"))
+                new MedicineQuantityDTO(rs.getInt("medicine_id"), rs.getFloat("quantity"))
         );
     }
 

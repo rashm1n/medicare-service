@@ -8,7 +8,7 @@ public class PrescriptionMedicineCreationDTO {
     private String frequencyText;
     private int duration;
     private String additionalInfo;
-    private int quantity;
+    private float quantity;
     private float price;
 
     public PrescriptionMedicineCreationDTO() {
@@ -20,7 +20,7 @@ public class PrescriptionMedicineCreationDTO {
                                            String frequencyText,
                                            int duration,
                                            String additionalInfo,
-                                           int quantity,
+                                           float quantity,
                                            float price) {
         this.medicineId = medicineId;
         this.dose = dose;
@@ -72,11 +72,11 @@ public class PrescriptionMedicineCreationDTO {
         this.additionalInfo = additionalInfo;
     }
 
-    public int getQuantity() {
+    public float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(float quantity) {
         this.quantity = quantity;
     }
 

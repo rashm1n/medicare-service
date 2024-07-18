@@ -31,6 +31,7 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                                 rs.getString("reg_no"),
                                 rs.getString("name"),
                                 rs.getInt("age"),
+                                rs.getInt("age_months"),
                                 rs.getString("gender"),
                                 rs.getString("nic"),
                                 rs.getInt("tp_number"),
@@ -59,7 +60,7 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                         new MedicineDTO(rs.getLong("medicine_id"),
                                 rs.getString("medicine_name"),
                                 rs.getFloat("unit_price"),
-                                rs.getInt("units"),
+                                rs.getFloat("units"),
                                 rs.getInt("minimum_units"),
                                 rs.getString("type")),
                         rs.getLong("id"),
@@ -68,7 +69,7 @@ public class PrescriptionMapper implements ResultSetExtractor<Map<Long, Prescrip
                         rs.getString("frequency_text"),
                         rs.getInt("duration"),
                         rs.getString("additional_info"),
-                        rs.getInt("quantity"),
+                        rs.getFloat("quantity"),
                         rs.getFloat("price")
                 );
                 prescriptionMedicineDTOList.add(prescriptionMedicineDTO);

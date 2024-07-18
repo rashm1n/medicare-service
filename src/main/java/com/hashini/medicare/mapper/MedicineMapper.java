@@ -16,7 +16,7 @@ public class MedicineMapper implements RowMapper<MedicineDTO> {
                 rs.getInt("medicine_id"),
                 rs.getString("medicine_name"),
                 rs.getFloat("unit_price"),
-                rs.getInt("units"),
+                rs.getFloat("units"),
                 rs.getInt("minimum_units"),
                 rs.getString("type")
         );

@@ -27,5 +27,5 @@ public interface MedicineDAO {
     int deleteMedicine(long id);
 
     void updateUnits(long id,
-                     int quantityDifference);
+                     float quantityDifference);
 }

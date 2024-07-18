@@ -6,6 +6,7 @@ public class Patient {
     private String regNo;
     private String name;
     private int age;
+    private int ageMonths;
     private String gender;
     private int tpNumber;
     private String nic;
@@ -15,12 +16,13 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(long id, String regNo, String name, int age, String gender, String nic, int tpNumber,
+    public Patient(long id, String regNo, String name, int age, int ageMonths, String gender, String nic, int tpNumber,
                    String address, String allergies) {
         this.id = id;
         this.regNo = regNo;
         this.name = name;
         this.age = age;
+        this.ageMonths = ageMonths;
         this.gender = gender;
         this.tpNumber = tpNumber;
         this.nic = nic;
@@ -50,6 +52,14 @@ public class Patient {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public int getAgeMonths() {
+        return ageMonths;
+    }
+
+    public void setAgeMonths(int ageMonths) {
+        this.ageMonths = ageMonths;
     }
 
     public String getGender() {

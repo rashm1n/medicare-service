@@ -3,9 +3,9 @@ package com.hashini.medicare.dto;
 public class MedicineQuantityDTO {
 
     private int medicineId;
-    private int quantity;
+    private float quantity;
 
-    public MedicineQuantityDTO(int medicineId, int quantity) {
+    public MedicineQuantityDTO(int medicineId, float quantity) {
         this.medicineId = medicineId;
         this.quantity = quantity;
     }
@@ -18,11 +18,11 @@ public class MedicineQuantityDTO {
         this.medicineId = medicineId;
     }
 
-    public Integer getQuantity() {
+    public float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(float quantity) {
         this.quantity = quantity;
     }
 }

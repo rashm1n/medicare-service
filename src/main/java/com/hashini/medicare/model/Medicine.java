@@ -5,11 +5,11 @@ public class Medicine {
     private long id;
     private String name;
     private float unitPrice;
-    private int units;
+    private float units;
     private int minimumUnits;
     private long medicineTypeId;
 
-    public Medicine(long id, String name, float unitPrice, int units, int minimumUnits, long medicineTypeId) {
+    public Medicine(long id, String name, float unitPrice, float units, int minimumUnits, long medicineTypeId) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
@@ -42,11 +42,11 @@ public class Medicine {
         this.name = name;
     }
 
-    public int getUnits() {
+    public float getUnits() {
         return units;
     }
 
-    public void setUnits(int units) {
+    public void setUnits(float units) {
         this.units = units;
     }
 
