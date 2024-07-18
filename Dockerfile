@@ -1,17 +1,17 @@
-# Use the official GraalVM image as the base image for native build
+# Stage 1: Build the application
 FROM ghcr.io/graalvm/graalvm-ce:ol7-java17-22.3.3 as builder
-RUN yum install -y maven
+RUN microdnf install -y maven
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-RUN mvn package -Pnative -DskipTests
+RUN mvn -Pnative clean package
 
-FROM busybox:glibc
+
+FROM oraclelinux:9-slim
 WORKDIR /app
 RUN addgroup --gid 10014 medicare && \
     adduser --disabled-password --no-create-home --uid 10014 --ingroup medicare medicareuser
-COPY --from=builder /app/target/medicare .
-RUN chmod +x medicare
+COPY --from=builder /app/target/medicare ./medicare
 USER 10014
 EXPOSE 8080
-ENTRYPOINT ["./medicare"]
+CMD ["./medicare"]
