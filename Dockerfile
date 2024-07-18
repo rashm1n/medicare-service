@@ -1,6 +1,6 @@
 # Stage 1: Build the application
 FROM ghcr.io/graalvm/graalvm-ce:ol7-java17-22.3.3 as builder
-RUN microdnf install -y maven
+RUN yum install -y maven
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
