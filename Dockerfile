@@ -4,7 +4,6 @@ RUN yum install -y maven
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-RUN mvn dependency:go-offline
 RUN mvn package -Pnative -DskipTests
 
 FROM busybox:glibc
