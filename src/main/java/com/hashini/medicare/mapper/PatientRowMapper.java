@@ -15,6 +15,7 @@ public class PatientRowMapper implements RowMapper<PatientDTO> {
         patient.setRegNo(rs.getString("reg_no"));
         patient.setName(rs.getString("name"));
         patient.setAge(rs.getInt("age"));
+        patient.setAgeMonths(rs.getInt("age_months"));
         patient.setGender(rs.getString("gender"));
         patient.setNic(rs.getString("nic"));
         patient.setAddress(rs.getString("address"));

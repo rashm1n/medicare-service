@@ -25,6 +25,7 @@ public class PatientMapper implements ResultSetExtractor<Map<Long, PatientDTO>> 
                         rs.getString("reg_no"),
                         rs.getString("name"),
                         rs.getInt("age"),
+                        rs.getInt("age_months"),
                         rs.getString("gender"),
                         rs.getString("nic"),
                         rs.getInt("tp_number"),

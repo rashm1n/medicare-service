@@ -9,12 +9,12 @@ public class PatientDTO {
     private String regNo;
     private String name;
     private int age;
+    private int ageMonths;
     private String gender;
     private int tpNumber;
     private String nic;
     private String address;
     private String allergies;
-
     private OffsetDateTime createdTime;
     private OffsetDateTime updatedTime;
     private List<PrescriptionDTO> prescriptions;
@@ -22,12 +22,13 @@ public class PatientDTO {
     public PatientDTO() {
     }
 
-    public PatientDTO(long id, String regNo, String name, int age, String gender, String nic, int tpNumber,
+    public PatientDTO(long id, String regNo, String name, int age, int ageMonths, String gender, String nic, int tpNumber,
                       String address, String allergies, OffsetDateTime createdTime, OffsetDateTime updatedTime) {
         this.id = id;
         this.regNo = regNo;
         this.name = name;
         this.age = age;
+        this.ageMonths = ageMonths;
         this.gender = gender;
         this.tpNumber = tpNumber;
         this.nic = nic;
@@ -63,6 +64,14 @@ public class PatientDTO {
 
     public String getGender() {
         return gender;
+    }
+
+    public int getAgeMonths() {
+        return ageMonths;
+    }
+
+    public void setAgeMonths(int ageMonths) {
+        this.ageMonths = ageMonths;
     }
 
     public void setGender(String gender) {

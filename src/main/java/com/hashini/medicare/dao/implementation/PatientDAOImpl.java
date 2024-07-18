@@ -54,7 +54,7 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public Optional<PatientDTO> selectPatientById(long id, int cityId) {
-        String sql = "SELECT p.patient_id, p.reg_no, p.name, p.age, p.gender, p.nic, p.address, " +
+        String sql = "SELECT p.patient_id, p.reg_no, p.name, p.age, p.age_months, p.gender, p.nic, p.address, " +
                 "p.tp_number, p.allergies, p.created_date, p.updated_date, pr.prescription_id, pr.patient_id, " +
                 "pr.diagnosis, pr.history, pr.processed, pr.created_date AS prescription_created_date, pr.total_price, " +
                 "pr.consultation_info, pr.consultation_fee, pr.investigation_info, pr.investigation_fee " +
@@ -72,8 +72,8 @@ public class PatientDAOImpl implements PatientDAO {
         String registerNumber;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        String sql = "INSERT INTO patients(reg_no,name,age,gender,nic,address,tp_number,allergies,city_id) " +
-                "VALUES (?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO patients(reg_no,name,age,age_months,gender,nic,address,tp_number,allergies,city_id) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?)";
         if (cityId == 1) {
             registerNumber = String.format("BKE%06d",
                     jdbcTemplate.queryForObject("SELECT nextval('patient_ella_reg_no_seq')", Integer.class));
@@ -89,12 +89,13 @@ public class PatientDAOImpl implements PatientDAO {
             ps.setString(1, registerNumber);
             ps.setString(2, patient.getName());
             ps.setInt(3, patient.getAge());
-            ps.setString(4, patient.getGender());
-            ps.setString(5, patient.getNic());
-            ps.setString(6, patient.getAddress());
-            ps.setInt(7, patient.getTpNumber());
-            ps.setString(8, patient.getAllergies());
-            ps.setInt(9, cityId);
+            ps.setInt(4, patient.getAgeMonths());
+            ps.setString(5, patient.getGender());
+            ps.setString(6, patient.getNic());
+            ps.setString(7, patient.getAddress());
+            ps.setInt(8, patient.getTpNumber());
+            ps.setString(9, patient.getAllergies());
+            ps.setInt(10, cityId);
             return ps;
         }, keyHolder);
 
@@ -104,9 +105,9 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public PatientDTO updatePatient(Patient patient, long id) {
-        String sql = "UPDATE patients SET name = ?, age = ?, gender = ?, tp_number = ?, nic = ?, address = ?, " +
-                "allergies = ?, updated_date = CURRENT_TIMESTAMP WHERE patient_id = ?";
-        jdbcTemplate.update(sql, patient.getName(), patient.getAge(), patient.getGender(),
+        String sql = "UPDATE patients SET name = ?, age = ?, age_months = ?, gender = ?, tp_number = ?, nic = ?, " +
+                "address = ?, allergies = ?, updated_date = CURRENT_TIMESTAMP WHERE patient_id = ?";
+        jdbcTemplate.update(sql, patient.getName(), patient.getAge(), patient.getAgeMonths(), patient.getGender(),
                 patient.getTpNumber(), patient.getNic(), patient.getAddress(), patient.getAllergies(), id);
         return findPatientById(id);
     }
@@ -124,7 +125,7 @@ public class PatientDAOImpl implements PatientDAO {
     }
 
     private PatientDTO findPatientById(long patientId) {
-        String sql = "SELECT patient_id, reg_no, name, age, gender, nic, address, tp_number, " +
+        String sql = "SELECT patient_id, reg_no, name, age, age_months, gender, nic, address, tp_number, " +
                 "allergies, created_date, updated_date FROM patients WHERE patient_id = ?";
         return jdbcTemplate.queryForObject(sql, new PatientRowMapper(), patientId);
     }
