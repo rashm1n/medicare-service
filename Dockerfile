@@ -1,10 +1,11 @@
 # Use the official GraalVM image as the base image for native build
 FROM ghcr.io/graalvm/graalvm-ce:ol7-java17-22.3.3 as builder
+RUN yum install -y maven
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-COPY mvnw .
-RUN ./mvnw package -Pnative -DskipTests
+RUN mvn dependency:go-offline
+RUN mvn package -Pnative -DskipTests
 
 FROM busybox:glibc
 WORKDIR /app
