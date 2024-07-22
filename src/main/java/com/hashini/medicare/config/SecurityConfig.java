@@ -37,6 +37,7 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/medicare/v1/login").permitAll()
+                        .requestMatchers("/medicare/v1/health").permitAll()
                         .requestMatchers("/medicare/v1/change-password").authenticated()
                         .anyRequest().authenticated()
                 )
