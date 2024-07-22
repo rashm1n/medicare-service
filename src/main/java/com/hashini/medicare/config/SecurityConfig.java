@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -36,11 +34,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         logger.info("Inside securityFilterChain method");
         http.cors().and().csrf().disable()
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/medicare/v1/login").permitAll()
-                        .requestMatchers("/medicare/v1/change-password").authenticated()
-                        .anyRequest().authenticated()
-                )
+                .authorizeRequests()
+                .antMatchers("/medicare/v1/login").permitAll()
+                .antMatchers("/medicare/v1/change-password").authenticated()
+                .anyRequest().authenticated()
+                .and()
                 .httpBasic();
         return http.build();
     }

@@ -26,4 +26,6 @@ public interface PrescriptionDAO {
                                                      LocalDateTime endDate,
                                                      int cityId);
 
+    int deletePrescription(long prescriptionId);
+
 }

@@ -164,4 +164,10 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
                 new PrescriptionAnalyticsDTO(rs.getInt("total_prescription_count"),
                         rs.getFloat("total_price_sum")));
     }
+
+    @Override
+    public int deletePrescription(long prescriptionId) {
+        String sql = "DELETE FROM prescriptions WHERE prescription_id = ?";
+        return jdbcTemplate.update(sql, prescriptionId);
+    }
 }
