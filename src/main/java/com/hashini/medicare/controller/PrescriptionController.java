@@ -59,4 +59,10 @@ public class PrescriptionController {
                                    @RequestParam int cityId) {
         return prescriptionService.updatePrescription(prescription, id, cityId);
     }
+
+    @DeleteMapping("/{id}")
+    public long deletePrescription(@PathVariable long id,
+                                   @RequestParam int cityId) {
+        return prescriptionService.deletePrescription(id, cityId);
+    }
 }

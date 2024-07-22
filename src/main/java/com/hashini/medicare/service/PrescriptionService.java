@@ -85,6 +85,18 @@ public class PrescriptionService {
                 }).orElseThrow(() -> new NotFoundException("Prescription with id = " + prescriptionId + " not found"));
     }
 
+    @Transactional(rollbackFor = {NotFoundException.class})
+    public int deletePrescription(long id,
+                                  int cityId) {
+        return prescriptionDAO.selectPrescriptionById(id, cityId)
+                .map(prescription -> {
+                    List<MedicineQuantityDTO> originalMedicines = prescriptionMedicineDAO.findByPrescriptionId(id);
+                    restoreInventory(originalMedicines);
+                    return prescriptionDAO.deletePrescription(id);
+                })
+                .orElseThrow(() -> new NotFoundException("Prescription id = " + id + " not found"));
+    }
+
     private void restoreInventory(List<MedicineQuantityDTO> medicines) {
         for (MedicineQuantityDTO medicine : medicines) {
             medicineDAO.updateUnits(medicine.getMedicineId(), medicine.getQuantity());
